@@ -1,0 +1,26 @@
+{
+  "name": "collect-logmap",
+  "version": "0.0.0",
+  "authors": [
+    "Franck Albinet <franckalbinet@gmail.com>"
+  ],
+  "description": "Monitoring data collection workflow",
+  "keywords": [
+    "data",
+    "visualization",
+    "data collection"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "bootstrap": "~3.3.4",
+    "bootstrap-multiselect": "~0.9.12"
+  }
+}
