@@ -18,6 +18,8 @@ window.Vis = {
     Vis.DEFAULTS.PREF_NAME_CENTROID = "pref_name_centroid.csv";
     Vis.DEFAULTS.COORDINATES_INCIDENT = [37.41898, 141.023511];
     Vis.DEFAULTS.MAX_PLANNED = 10000; // for demo/simulated dataset -- will be remove in real situation
+    Vis.DEFAULTS.MAX_LABS = 50; 
+    Vis.DEFAULTS.MAX_COLLECTORS = 300; 
     Vis.DEFAULTS.NB_PERIODS_SIMULATED = d3.range(0,10); // for demo/simulated dataset -- will be remove in real situation
     Vis.DEFAULTS.GROWTH_RATES_SIMULATED = [
       d3.scale.linear().domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
