@@ -20,7 +20,8 @@ window.Vis = {
     Vis.DEFAULTS.MAX_PLANNED = 10000; // for demo/simulated dataset -- will be remove in real situation
     Vis.DEFAULTS.MAX_LABS = 50; 
     Vis.DEFAULTS.MAX_COLLECTORS = 300; 
-    Vis.DEFAULTS.NB_PERIODS_SIMULATED = d3.range(0,10); // for demo/simulated dataset -- will be remove in real situation
+    Vis.DEFAULTS.NB_PERIODS_SIMULATED = d3.range(0,20); // for demo/simulated dataset -- will be remove in real situation
+    Vis.DEFAULTS.PERDOD_SPEED = 200;
     Vis.DEFAULTS.GROWTH_RATES_SIMULATED = [
       d3.scale.linear().domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
       d3.scale.pow().exponent(0.1).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),

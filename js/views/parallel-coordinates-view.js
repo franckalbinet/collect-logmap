@@ -12,12 +12,17 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
 
       this.chartId = "#" + this.$el.find("[id$=-chart]").attr("id");
 
-      // will be dynamic selection of period later on 
-      this.data = this.model.get("data").data.filter(function(d) {return d.period == 9  });
-      this.render();
+      this.model.on("change:period", function() {
+        var period = this.get("period");
+        that.data = this.get("data").data.filter(function(d) {return d.period == period});
+        that.updateChart();
+      });
+
+      this.data = this.model.get("data").data.filter(function(d) {return d.period == 0});
+      this.initChart();
     },
 
-    render: function() {
+    initChart: function() {
       var that = this;
 
       this.chart = d3.parcoords()(this.chartId)
@@ -25,8 +30,6 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
         .height(380)
         .margin({top: 30, left:0, bottom: 10,right: 10})
         .data(that.data)
-        //.alpha(0.2)
-        //.composite("destination-atop")
         .shadows()
         .detectDimensions()
         .dimensions(["labs","analysed","planned","collected","collectors"])
@@ -35,9 +38,6 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
         .brushMode("1D-axes")
         .createAxes();
 
-        // get planned domain first
-        // update scales
-        // re-render
       var maxPlanned = d3.max(that.data, function(d) {return d.planned})
 
       // update Y scales domains
@@ -68,26 +68,16 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
           this.highlight(d);
         }
       });
-
-      /*
-      this.chart.on("highlight", function(d){
-        //this.highlight(d)
-        console.log(d)
-      });
-      */
-
-      //this.chart.ctx.foreground.strokeStyle = "#f00";
-      //this.chart.ctx.shadows.strokeStyle = "#00f";
-      //this.chart.ctx.shadows.strokeStyle = "#00f";
-
-
-      var bp = null;
-      
-
     },
 
-    initChart: function() {
-
+    updateChart: function() {
+      this.chart.brushReset();
+      this.chart.unhighlight(this.chart.highlighted());
+      /*this.chart.clear("highlight");
+      this.chart.clear("foreground");
+      this.chart.clear("shadows");*/
+      this.chart.data(this.data);
+      this.chart.render();
     }
 
     

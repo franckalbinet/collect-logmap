@@ -4,7 +4,8 @@ Vis.Models.App = Backbone.Model.extend({
 
   defaults: {
     data: null,
-    timeBtnStatus: "pause" // "pause" or "play"
+    timeBtnStatus: "pause", // "pause" or "play"
+    period: 0
   },
 
   //histBounds: null,

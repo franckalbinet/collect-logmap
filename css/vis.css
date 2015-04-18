@@ -30,9 +30,13 @@
 }
 
 .btn-primary .badge {
-	color: #777;
+	min-width: 53px;
+	padding-right: 11px;
+	color: #333;
 	background-color: #ffffff;
 	font-size: 11px;
+	font-weight: bold;
+	text-align: right;
 	border-radius: 5px;
 	margin-left: 10px;
 	margin-top: 2px;
