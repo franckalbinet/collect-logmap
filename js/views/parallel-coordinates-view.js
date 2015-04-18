@@ -58,6 +58,9 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
 
       this.chart.render().reorderable().updateAxes();
 
+      // update brush handles width
+      d3.selectAll("svg g.resize rect").attr("height", "4").attr("y", "-2");
+
       this.chart.on("brush", function(d) {
         if(_.isEmpty(this.brushExtents())) {
           this.unhighlight(d);

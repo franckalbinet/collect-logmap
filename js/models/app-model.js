@@ -3,7 +3,8 @@ Vis.Models.App = Backbone.Model.extend({
   //logBin: null,
 
   defaults: {
-    data: null
+    data: null,
+    timeBtnStatus: "pause" // "pause" or "play"
   },
 
   //histBounds: null,
@@ -12,7 +13,7 @@ Vis.Models.App = Backbone.Model.extend({
     this.listenTo(Vis.Collections.app, "loaded", function(data) { this.bundle(data); });
   },
 
-  
+
   bundle: function(data) {
     var that = this;
 

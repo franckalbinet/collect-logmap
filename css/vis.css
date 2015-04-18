@@ -29,6 +29,15 @@
 	margin-bottom: 0px;
 }
 
+.btn-primary .badge {
+	color: #777;
+	background-color: #ffffff;
+	font-size: 11px;
+	border-radius: 5px;
+	margin-left: 10px;
+	margin-top: 2px;
+}
+
 ul.pager a {
 	color: #7499B7;
 }
@@ -146,6 +155,9 @@ ul.pager a {
 }
 
 /* Footer */
+#footer {
+	margin-top: 40px;
+}
 #footer hr {
 	margin-top: 10px;
 	margin-bottom: 0px;
@@ -165,9 +177,17 @@ ul.pager a {
 	font-weight: bold;
 }
 
+/* Time emulator button */
+#time-emulator-view .btn {
+}
+#time-emulator-view span.status {
+	display: inline-block;
+	min-width: 35px;
+}
+
 /* Reset buttons */
 a.reset {
-	//display: none; /* will be further display when graph filtered */
+	/*display: none; */
 	display: inline-block; /* will be further display when graph filtered */
 }
 
@@ -294,6 +314,13 @@ g.dimension text.label {
 	font-weight: bold;
 	text-transform: uppercase;
 	text-transform: ;
+}
+#parallel-coodinates-view g.resize rect {
+	fill: rgba(187, 48, 48, 0.9);
+}
+.parcoords rect.extent {
+	fill: rgba(0, 0, 0, 0.2);
+	stroke: rgba(158, 41, 41, 0);
 }
 
 /* Map Leaflet */
