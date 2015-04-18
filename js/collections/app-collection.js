@@ -94,7 +94,7 @@ Vis.Collections.App = Backbone.Collection.extend({
       */
 
       that.trigger("loaded", {
-        "nameCentroid": nameCentroid
+        "data": withAnalysed
       });
     }
   },

@@ -8,16 +8,18 @@ Vis.Views.App = Backbone.View.extend({
     },
 
     render: function() {
+      var that = this;
 
       $("#data-loading").css("display", "none");
       this.$el.css("display", "block");
 
-      /*
+      new Vis.Views.TimeEmulator({ el: '#parallel-coodinates-view', model: this.model});
+      new Vis.Views.ParallelCoordinates({ el: '#parallel-coodinates-view', model: this.model});
       new Vis.Views.Map({ el: '#map-collected-vs-planned'});
       new Vis.Views.Map({ el: '#map-collected-vs-collectors'});
       new Vis.Views.Map({ el: '#map-analysed-vs-collected'});
       new Vis.Views.Map({ el: '#map-analysed-vs-labs'});
-      */
+
 
       /*
       this.updateSwitch();

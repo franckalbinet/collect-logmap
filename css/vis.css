@@ -20,6 +20,11 @@
 /*
   Layout 
 */
+[class*="col-"] {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
 .row {
 	margin-bottom: 0px;
 }
@@ -31,7 +36,7 @@ ul.pager a {
 /* Page header */
 .page-header {
 	padding-bottom: 0px;
-	margin-bottom: 40px;
+	margin-bottom: 50px;
 }
 .page-header p.lead {
 	display: inline-block;
@@ -102,7 +107,7 @@ ul.pager a {
 }
 
 .section .title {
-	padding-bottom: 0px;
+	padding-bottom: 5px;
 	width: 100%;
 	border-bottom: 1px solid #ddd;
 	line-height: 28px;
@@ -162,7 +167,8 @@ ul.pager a {
 
 /* Reset buttons */
 a.reset {
-	display: none; /* will be further display when graph filtered */
+	//display: none; /* will be further display when graph filtered */
+	display: inline-block; /* will be further display when graph filtered */
 }
 
 /* Radionuclides / substance type */
@@ -275,10 +281,25 @@ a:hover, .dropdown-menu > .active > a:focus {
 
 /* Charts & map */
 
+
+/* // coordinaates chart */
+#parallel-coodinates-view {
+	height: 380px;
+}
+.parcoords text.label {
+	cursor: move;
+}
+g.dimension text.label {
+	font-size: 11px;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-transform: ;
+}
+
 /* Map Leaflet */
 .map {
 	width: 100%;
-	height: 400px;
+	height: 380px;
 }
 
 

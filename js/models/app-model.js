@@ -12,8 +12,12 @@ Vis.Models.App = Backbone.Model.extend({
     this.listenTo(Vis.Collections.app, "loaded", function(data) { this.bundle(data); });
   },
 
+  
   bundle: function(data) {
     var that = this;
+
+    // update model
+    this.set("data", data);
 
     /*
     // Hardcoded cases will be replace by additionnal business logic later on based on time extent of dataset
@@ -79,8 +83,6 @@ Vis.Models.App = Backbone.Model.extend({
     //data.grps.dose.top(Infinity);
     //data.grps.idLatLon.top(Infinity);
     */
-    // update model
-    this.set("data", data);
    
     /*
     function _histBins(value) {

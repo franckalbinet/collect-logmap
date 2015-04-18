@@ -25,6 +25,8 @@
     <!-- Leaflet plugins -->
     <link rel='stylesheet' href='css/vendor/Leaflet.PanControl/L.Control.Pan.css' rel="stylesheet"/>
     <link rel='stylesheet' href='css/vendor/Leaflet.PanControl/L.Control.Pan.ie.css' rel="stylesheet"/>
+    <!-- // coordinates lib -->
+    <link rel='stylesheet' href='bower_components/parallel-coordinates/d3.parcoords.css' rel="stylesheet"/>
 
 
     <!-- Site css -->
@@ -57,6 +59,7 @@
       </div>
 
       <!-- Summary statistics -->
+      <!--
       <div class="row">
         <div class="col-md-12" id="data-summary-view">
           <hr>
@@ -79,10 +82,6 @@
                 <div class="col-md-3">
                   Mean: <span class="data" id="mean"></span>
                 </div>
-                <!--
-                <div class="col-md-3">
-                  Std deviation: <span class="data" id="deviation">20</span>
-                </div>-->
                 <div class="col-md-3">
                   Max: <span class="data" id="max"></span>
                 </div>
@@ -92,178 +91,58 @@
           <hr>
         </div>
       </div>
-
-
+    -->
       
       <div class="row">
-        <div class="col-md-4 section" id="substance-type-view">
+        <div class="col-md-4 section">
           <div class="title">Collected / Planned </div>
           <div class="content">
             <div class="map fill-placeholder" id="map-collected-vs-planned">
             </div>
-            <!--
-            <div class="btn-group btn-group-justified">
-              <a href="#" class="btn btn-default btn-xs selected" id="6"><sup>137</sup>Cs</a>  
-              <a href="#" class="btn btn-default btn-xs" id="2"><sup>134</sup>Cs</a>
-              <a href="#" class="btn btn-default btn-xs" id="3"><sup>131</sup>I</a>
-            </div>
-            -->
+           
           </div> 
-        </div>
-        <div class="col-md-8 section" id="foodstuff-type-view">
-          <div class="title">Data collection & analysis profiles</div>
-          <div class="content fill-placeholder">
-            <!--
-            <select id="foodstuffs-select" multiple="multiple">
-            </select>
-          -->
+        </div>  
+        <div class="col-md-8 section" id="parallel-coodinates-view">
+          <div class="title">Data collection & analysis profiles<a href="#" class="btn btn-default btn-xs pull-right reset">Reset</a></div>
+          <div class="content parcoords" id="parallel-coordinates-chart">
+          
           </div> 
         </div>
 
-        <!--
-        <div class="col-md-3 section" id="substance-type-view">
-          <div class="title">Collected Vs Planned RATIO</div>
-          <div class="content fill-placeholder">
-            <div class="map" id="map-collected-vs-planned">
-            </div>
-            
-          </div> 
-        </div>
-        -->
       </div>
 
+      <div class="row">
+        <div class="col-md-12 text-center" id="time-emulator-view">
+          <a href="#" class="btn btn-primary btn-sm play"> <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Play</a>
+        </div>
+      </div>
 
        <div class="row">
-         <div class="col-md-4 section" id="substance-type-view">
+         <div class="col-md-4 section">
           <div class="title">Collected / Collectors </div>
           <div class="content">
             <div class="map fill-placeholder" id="map-collected-vs-collectors">
             </div>
-            <!--
-            <div class="btn-group btn-group-justified">
-              <a href="#" class="btn btn-default btn-xs selected" id="6"><sup>137</sup>Cs</a>  
-              <a href="#" class="btn btn-default btn-xs" id="2"><sup>134</sup>Cs</a>
-              <a href="#" class="btn btn-default btn-xs" id="3"><sup>131</sup>I</a>
-            </div>
-            -->
           </div> 
         </div>
 
-        <div class="col-md-4 section" id="substance-type-view">
+        <div class="col-md-4 section">
           <div class="title">Analysed / Collected </div>
           <div class="content">
             <div class="map fill-placeholder" id="map-analysed-vs-collected">
             </div>
-            <!--
-            <div class="btn-group btn-group-justified">
-              <a href="#" class="btn btn-default btn-xs selected" id="6"><sup>137</sup>Cs</a>  
-              <a href="#" class="btn btn-default btn-xs" id="2"><sup>134</sup>Cs</a>
-              <a href="#" class="btn btn-default btn-xs" id="3"><sup>131</sup>I</a>
-            </div>
-            -->
           </div> 
         </div>
 
-       
-
-        <div class="col-md-4 section" id="substance-type-view">
+        <div class="col-md-4 section">
           <div class="title">Analysed / Labs </div>
           <div class="content">
             <div class="map fill-placeholder" id="map-analysed-vs-labs">
             </div>
-            <!--
-            <div class="btn-group btn-group-justified">
-              <a href="#" class="btn btn-default btn-xs selected" id="6"><sup>137</sup>Cs</a>  
-              <a href="#" class="btn btn-default btn-xs" id="2"><sup>134</sup>Cs</a>
-              <a href="#" class="btn btn-default btn-xs" id="3"><sup>131</sup>I</a>
-            </div>
-            -->
+        
           </div> 
         </div>
       </div>
-
-    
-      <!-- Radionuclides && Foodstuff types -->
-      <!--
-      <div class="row">
-        <div class="col-md-6 section" id="substance-type-view">
-          <div class="title">Radionuclides types <span class="ui-info">| Click to toggle radionuclide type</span></div>
-          <div class="content">
-            <div class="btn-group btn-group-justified">
-              <a href="#" class="btn btn-default btn-xs selected" id="6"><sup>137</sup>Cs</a>  
-              <a href="#" class="btn btn-default btn-xs" id="2"><sup>134</sup>Cs</a>
-              <a href="#" class="btn btn-default btn-xs" id="3"><sup>131</sup>I</a>
-            </div>
-          </div> 
-        </div>
-        <div class="col-md-6 section" id="foodstuff-type-view">
-          <div class="title">Foodstuffs types <span class="ui-info">| Select foodstuffs types of interest</span></div>
-          <div class="content">
-            <select id="foodstuffs-select" multiple="multiple">
-            </select>
-          </div> 
-        </div>
-      </div>
-    -->
-
-      <!-- bar charts -->
-      <!--
-      <div class="row">
-        <div class="col-md-6 section" id="count-time-view">
-          <div class="title">Number of measurements over time <span class="ui-info">| Select period of interest</span> <a href="#" class="btn btn-default btn-xs pull-right reset">Reset</a></div>
-          <div class="content" id="count-time-chart"></div> 
-        </div>
-        <div class="col-md-6 section" id="hist-concentration-view">
-          <div class="title">Concentration level histogram (Bq/Kg) <span class="ui-info">| Select range of interest</span><a href="#" class="btn btn-default btn-xs pull-right reset">Reset</a></div>
-          <div class="content" id="hist-concentration-chart"></div> 
-        </div>
-      </div>
-    -->
-  
-
-      <!-- map -->
-      <!--
-      <div class="row">
-        <div class="col-md-12 section" id="map-view">
-          <div class="title">Spatial distribution of measurements <span class="ui-info">| Select area of interest</span> <a href="#" class="btn btn-default btn-xs pull-right reset">Reset</a></div>
-          <div class="content" id="map-chart">
-            <button type="button" class="btn btn-default btn-sm" aria-label="Left Align" id="default-location" data-toggle="tooltip" data-placement="top" title="Switch to default view">
-              <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-            </button>
-            <div id='legend-choropleth'></div>
-          </div>
-        </div>
-      </div>
-    -->
-
-      <!-- Data list -->
-      <!--
-      <div class="row">
-        <div class="col-md-12 section" id="data-list-view">
-          <div class="title">Measurements list <span class="ui-info">| Click on measurement to zoom to it</span></div>
-          <div class="content" id="data-list">
-            <table class="table table-striped table-hover ">
-              <thead>
-                <tr>
-                  <th style="width:30%">Foodstuff type</th>
-                  <th>Substance</th>
-                  <th style="width:15%" class="orderable" id="date">Date <span class="glyphicon glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span></th>
-                  <th class="orderable" id="concentration">Concentration (Bq/Kg) <span class="glyphicon glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span></th>
-                  <th>Latitude</th>
-                  <th>Longitude</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-          <ul class="pager">
-            <li><a href="#" id="previous">Previous</a></li>
-            <li><a href="#" id="next">Next</a></li>
-          </ul>
-        </div>
-      </div>
-    -->
 
       <!-- Footer -->
       <div class="row">
@@ -273,7 +152,8 @@
             <div class="col-md-5">
               <ul>
                 <li><h3>Sources</h3></li>
-                <li>JRC-ITU REMDB database</li>
+                <li>Simulated dataset</li>
+                <li>Natural Earth</li>
                 <li>OpenStreetMap</li>
               </ul>
             </div>
@@ -282,7 +162,7 @@
                 <li><h3>Credits</h3></li>
                 <li>Mapbox.js</li>
                 <li>D3.js</li>
-                <li>crossfilter.js</li>
+                <li>Parallel coordinates (Syntagmatic)</li>
                 <li>Backbone.js</li>
                 <li>Twitter Bootstrap</li>
                 <li>underscore.js</li>
@@ -344,9 +224,13 @@
     <script src="bower_components/backbone/backbone.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src='bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js'></script>
+    <script src='bower_components/parallel-coordinates/d3.parcoords.js'></script>
     <script src="js/app.js"></script>
     <script src="js/models/app-model.js"></script>
     <script src="js/views/app-view.js"></script>
+    <script src="js/views/map-view.js"></script>
+    <script src="js/views/time-emulator-view.js"></script>
+    <script src="js/views/parallel-coordinates-view.js"></script>
     <script src="js/routers/app-router.js"></script>
     <script src="js/collections/app-collection.js"></script>
     <!--
