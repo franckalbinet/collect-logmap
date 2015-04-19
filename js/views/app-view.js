@@ -1,9 +1,11 @@
 Vis.Views.App = Backbone.View.extend({
 
     el: '#app',
+    colors: null,
     
     initialize: function () {
       this.model.on("change:data", this.render, this);
+      this.colors = ['rgb(189,201,225)','rgb(116,169,207)','rgb(43,140,190)','rgb(4,90,141)']
       //this.render();
     },
 
@@ -18,7 +20,7 @@ Vis.Views.App = Backbone.View.extend({
         el: '#map-collected-vs-planned',
         model: this.model,
         scale: d3.scale.threshold()
-          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .range(that.colors)
           .domain([25, 50, 75]),
         accessor: function(d) { return parseInt(d.properties.collected * 100 / d.properties.planned); }
       });
@@ -28,7 +30,7 @@ Vis.Views.App = Backbone.View.extend({
         el: '#map-planned-vs-collectors', 
         model: this.model,
         scale: d3.scale.threshold()
-          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .range(that.colors)
           .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.collectors; }), 4)),
         accessor: function(d) { return parseInt(d.properties.planned / d.properties.collectors); }
       });
@@ -37,7 +39,7 @@ Vis.Views.App = Backbone.View.extend({
         el: '#map-analysed-vs-collected', 
         model: this.model,
         scale: d3.scale.threshold()
-          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .range(that.colors)
           .domain([25, 50, 75]),
         accessor: function(d) { return parseInt(d.properties.analysed * 100 / d.properties.collected); }
       });
@@ -46,7 +48,7 @@ Vis.Views.App = Backbone.View.extend({
         el: '#map-planned-vs-labs', 
         model: this.model,
         scale: d3.scale.threshold()
-          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .range(that.colors)
           .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.labs; }), 4)),
           accessor: function(d) { return parseInt(d.properties.planned / d.properties.labs); }
       });

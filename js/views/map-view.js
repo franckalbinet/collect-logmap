@@ -3,6 +3,7 @@ Vis.Views.Map = Backbone.View.extend({
     map: null,
     features: null,
     g: null,
+    selected: [],
 
     scale: null,
     accessor: null,
@@ -35,7 +36,14 @@ Vis.Views.Map = Backbone.View.extend({
         that.joinGeomData(period);
         that.render();
       });
+
       
+      Backbone.on("pcBrushing featureIn featureOut", 
+        function(selected) { 
+          this.selected = selected;
+          that.render();
+        }
+      ,this);
     },
 
     joinGeomData: function(period) {
@@ -102,13 +110,26 @@ Vis.Views.Map = Backbone.View.extend({
         .attr("d", path)
         .attr("class", "choropleth")
         .style("fill", function(d) { 
-          console.log("in enter");
-          return that.scale(that.accessor(d)); });
+          //console.log("in enter");
+          return that.scale(that.accessor(d)); })
+        .on("mouseover", function(d) {
+          Backbone.trigger("featureIn", [d.id]);
+        })
+        .on("mouseout", function(d) {
+          Backbone.trigger("featureOut", []);
+        });
 
       // if same size
       //paths.attr("d", path)
       paths
         .style("fill", function(d) { 
-          return that.scale(that.accessor(d)); });     
+          return that.scale(that.accessor(d)); })
+        .style("fill-opacity", function(d) {
+          var opacity = 0.7;
+          if (that.selected.length != 0) {
+            opacity = (_.contains(that.selected, d.id)) ? 0.7 : 0;
+          }
+          return opacity;
+        });
     }
   });

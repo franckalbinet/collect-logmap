@@ -15,7 +15,8 @@ window.Vis = {
     //Vis.DEFAULTS.FOODSTUFF = "foodstuff.csv";
 
     Vis.DEFAULTS.PREF_NAME_CENTROID = "pref_name_centroid.csv";
-    Vis.DEFAULTS.PREF_GEOJSON = "jpn_adm1_topojson_0_4.json";
+    //Vis.DEFAULTS.PREF_GEOJSON = "jpn_adm1_topojson_0_4.json";
+    Vis.DEFAULTS.PREF_GEOJSON = "jpn_adm1_name_topojson.json";
     Vis.DEFAULTS.COORDINATES_INCIDENT = [37.41898, 141.023511];
     Vis.DEFAULTS.MAX_PLANNED = 10000; // for demo/simulated dataset -- will be remove in real situation
     Vis.DEFAULTS.MAX_LABS = 50; 

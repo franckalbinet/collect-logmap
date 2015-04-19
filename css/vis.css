@@ -192,8 +192,7 @@ ul.pager a {
 
 /* Reset buttons */
 a.reset {
-	/*display: none; */
-	display: inline-block; /* will be further display when graph filtered */
+	display: none; 
 }
 
 /* Radionuclides / substance type */
