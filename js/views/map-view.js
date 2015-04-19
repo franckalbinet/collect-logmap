@@ -4,6 +4,7 @@ Vis.Views.Map = Backbone.View.extend({
     features: null,
     g: null,
     selected: [],
+    legend: null,
 
     scale: null,
     accessor: null,
@@ -18,6 +19,7 @@ Vis.Views.Map = Backbone.View.extend({
 
       this.scale = options.scale;
       this.accessor = options.accessor;
+      this.legendTitle = options.legendTitle;
 
       // keep only geometry with data available
       this.features = this.model.get("data").geometry.features.filter(function(d) { 
@@ -29,15 +31,13 @@ Vis.Views.Map = Backbone.View.extend({
       if(this.map) this.map.remove();
 
       this.initMap();
-      
-      
+            
       this.model.on("change:period", function() {
         var period = this.get("period");
         that.joinGeomData(period);
         that.render();
       });
 
-      
       Backbone.on("pcBrushing featureIn featureOut", 
         function(selected) { 
           this.selected = selected;
@@ -87,6 +87,22 @@ Vis.Views.Map = Backbone.View.extend({
         that.model.set("zoomLevel", that.map.getZoom());
         that.render();
       });
+
+      // Legend
+      this.legend = d3.myLegendChoropleth()
+        .width(150)
+        .height(50)
+        .margins({top: 10, right: 40, bottom: 0, left: 10})
+        .colorScale(this.scale)
+        .title("");
+
+      this.renderLegend();
+
+    },
+
+    renderLegend: function() {
+      this.legendId = "#" + this.$el.find(".legend").attr("id");
+      d3.select(this.legendId).call(this.legend); 
     },
 
     render: function() {
@@ -110,7 +126,6 @@ Vis.Views.Map = Backbone.View.extend({
         .attr("d", path)
         .attr("class", "choropleth")
         .style("fill", function(d) { 
-          //console.log("in enter");
           return that.scale(that.accessor(d)); })
         .on("mouseover", function(d) {
           Backbone.trigger("featureIn", [d.id]);

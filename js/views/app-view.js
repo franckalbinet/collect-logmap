@@ -22,7 +22,8 @@ Vis.Views.App = Backbone.View.extend({
         scale: d3.scale.threshold()
           .range(that.colors)
           .domain([25, 50, 75]),
-        accessor: function(d) { return parseInt(d.properties.collected * 100 / d.properties.planned); }
+        accessor: function(d) { return parseInt(d.properties.collected * 100 / d.properties.planned); },
+        legendTitle: "In %"
       });
 
       
@@ -32,7 +33,8 @@ Vis.Views.App = Backbone.View.extend({
         scale: d3.scale.threshold()
           .range(that.colors)
           .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.collectors; }), 4)),
-        accessor: function(d) { return parseInt(d.properties.planned / d.properties.collectors); }
+        accessor: function(d) { return parseInt(d.properties.planned / d.properties.collectors); },
+        legendTitle: "In samples per collector"
       });
     
       new Vis.Views.Map({ 
@@ -41,7 +43,8 @@ Vis.Views.App = Backbone.View.extend({
         scale: d3.scale.threshold()
           .range(that.colors)
           .domain([25, 50, 75]),
-        accessor: function(d) { return parseInt(d.properties.analysed * 100 / d.properties.collected); }
+        accessor: function(d) { return parseInt(d.properties.analysed * 100 / d.properties.collected); },
+        legendTitle: "Analysed / Collected in %"
       });
       
       new Vis.Views.Map({ 
@@ -50,7 +53,8 @@ Vis.Views.App = Backbone.View.extend({
         scale: d3.scale.threshold()
           .range(that.colors)
           .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.labs; }), 4)),
-          accessor: function(d) { return parseInt(d.properties.planned / d.properties.labs); }
+          accessor: function(d) { return parseInt(d.properties.planned / d.properties.labs); },
+          legendTitle: "Samples per lab."
       });
       
       new Vis.Views.TimeEmulator({ 

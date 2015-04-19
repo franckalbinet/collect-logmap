@@ -120,7 +120,7 @@ ul.pager a {
 }
 
 .section .title {
-	padding-bottom: 5px;
+	padding-bottom: 0px;
 	width: 100%;
 	border-bottom: 1px solid #ddd;
 	line-height: 28px;
@@ -411,17 +411,17 @@ path.choropleth {
 }
 
 /* Choropleth legend */
-#legend-choropleth {
+.legend {
 	position: absolute;
 	z-index: 1;
-	bottom: 15px;
+	bottom: 0px;
 	right: 15px;
-	background: white;
+	background: rgba(255,255,255, 0.6);
 	border-radius: 3px;	
 }
-#legend-choropleth .title{
+.legend .title{
 	fill: #444;	
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: bold;
 }
 

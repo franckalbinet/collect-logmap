@@ -53,7 +53,7 @@ d3.myLegendChoropleth = function() {
           .enter()
         .append("rect")
           .style("fill", function(d) {return d[1];})
-          .style("fill-opacity", 0.6)
+          .style("fill-opacity", 0.7)
           .attr("x", function(d) {return _x(d[0]);})
           .attr("width", rectWidth)
           .attr("height", heightClassRect);
