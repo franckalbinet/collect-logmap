@@ -32,9 +32,14 @@ window.Vis = {
       d3.scale.pow().exponent(3).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
       d3.scale.pow().exponent(4).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1])
     ];
-
     Vis.DEFAULTS.MAP_FOCUS = {center: [38, 135], zoom: 5};
-
+    Vis.DEFAULTS.D3_TOOLTIP = d3.select("body")
+        .append("div")
+        .attr("class", "tooltips")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden");
+    
     /*
       SEQUENCE IS THE FOLLOWING:
       1. the collection listen to Router event 'loadData' when url hashstring parsed

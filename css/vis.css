@@ -420,9 +420,21 @@ path.choropleth {
 	border-radius: 3px;	
 }
 .legend .title{
-	fill: #444;	
+	fill: #666;	
 	font-size: 11px;
 	font-weight: bold;
+}
+
+/* Tooltips */
+ .tooltips {
+  background-color: rgba(255,255,255,.9);
+  background-color: rgba(0,0,0,.9);
+  text-align: center;
+  color: #eee;
+  font-size: 12px;
+  padding: 5px 8px 5px 8px;
+  border: 1px solid #444;
+  border-radius: 2px;
 }
 
 

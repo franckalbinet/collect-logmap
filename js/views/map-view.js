@@ -5,6 +5,7 @@ Vis.Views.Map = Backbone.View.extend({
     g: null,
     selected: [],
     legend: null,
+    tooltip: null,
 
     scale: null,
     accessor: null,
@@ -90,9 +91,10 @@ Vis.Views.Map = Backbone.View.extend({
 
       // Legend
       this.legend = d3.myLegendChoropleth()
-        .width(150)
+        .width(130)
         .height(50)
         .margins({top: 10, right: 40, bottom: 0, left: 10})
+        .heightClassRect(13)
         .colorScale(this.scale)
         .title("");
 
@@ -129,10 +131,15 @@ Vis.Views.Map = Backbone.View.extend({
           return that.scale(that.accessor(d)); })
         .on("mouseover", function(d) {
           Backbone.trigger("featureIn", [d.id]);
+          Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "visible");
         })
         .on("mouseout", function(d) {
           Backbone.trigger("featureOut", []);
-        });
+          Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "hidden");
+        })
+        .on("mousemove", function(d) {
+          Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+        })
 
       // if same size
       //paths.attr("d", path)
