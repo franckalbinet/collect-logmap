@@ -183,6 +183,7 @@ ul.pager a {
 
 /* Time emulator button */
 #time-emulator-view .btn {
+	margin-bottom: 40px;
 }
 #time-emulator-view span.status {
 	display: inline-block;
@@ -308,7 +309,7 @@ a:hover, .dropdown-menu > .active > a:focus {
 
 /* // coordinaates chart */
 #parallel-coodinates-view {
-	height: 380px;
+	height: 340px;
 }
 .parcoords text.label {
 	cursor: move;
@@ -330,7 +331,15 @@ g.dimension text.label {
 /* Map Leaflet */
 .map {
 	width: 100%;
-	height: 380px;
+	height: 340px;
+}
+
+path.choropleth {
+	fill: #AF3939;
+	fill-opacity: 0.7;
+	stroke: #000;
+	stroke-opacity: 0.2;
+	stroke-width: 0.5px;
 }
 
 

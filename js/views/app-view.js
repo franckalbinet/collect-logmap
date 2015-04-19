@@ -14,39 +14,52 @@ Vis.Views.App = Backbone.View.extend({
       this.$el.css("display", "block");
 
       new Vis.Views.ParallelCoordinates({ el: '#parallel-coodinates-view', model: this.model});
-      new Vis.Views.Map({ el: '#map-collected-vs-planned'});
-      new Vis.Views.Map({ el: '#map-collected-vs-collectors'});
-      new Vis.Views.Map({ el: '#map-analysed-vs-collected'});
-      new Vis.Views.Map({ el: '#map-analysed-vs-labs'});
-      new Vis.Views.TimeEmulator({ el: '#time-emulator-view', model: this.model});
+      new Vis.Views.Map({ 
+        el: '#map-collected-vs-planned',
+        model: this.model,
+        scale: d3.scale.threshold()
+          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .domain([25, 50, 75]),
+        accessor: function(d) { return parseInt(d.properties.collected * 100 / d.properties.planned); }
+      });
 
-
-      /*
-      this.updateSwitch();
-
-      if(this.countTime != undefined) {
-        this.countTime.initialize();
-        this.histConcentration.initialize();
-        this.substanceType.initialize();
-        this.map.initialize();
-        this.foodstuffType.initialize();
-        this.dataSummary.initialize();
-        this.dataList.initialize();        
-      } else {
-        this.countTime = new Vis.Views.CountTime({model: this.model});
-        this.histConcentration = new Vis.Views.HistConcentration({model: this.model});
-        this.substanceType = new Vis.Views.SubstanceType({model: this.model});
-        this.map = new Vis.Views.Map({model: this.model});
-        this.foodstuffType = new Vis.Views.FoodstuffType({model: this.model});
-        this.dataSummary = new Vis.Views.DataSummary({model: this.model});
-        this.dataList = new Vis.Views.DataList({model: this.model});
-      }
-      */
+      
+      new Vis.Views.Map({ 
+        el: '#map-planned-vs-collectors', 
+        model: this.model,
+        scale: d3.scale.threshold()
+          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.collectors; }), 4)),
+        accessor: function(d) { return parseInt(d.properties.planned / d.properties.collectors); }
+      });
+    
+      new Vis.Views.Map({ 
+        el: '#map-analysed-vs-collected', 
+        model: this.model,
+        scale: d3.scale.threshold()
+          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .domain([25, 50, 75]),
+        accessor: function(d) { return parseInt(d.properties.analysed * 100 / d.properties.collected); }
+      });
+      
+      new Vis.Views.Map({ 
+        el: '#map-planned-vs-labs', 
+        model: this.model,
+        scale: d3.scale.threshold()
+          .range(['rgb(241,238,246)','rgb(189,201,225)','rgb(116,169,207)','rgb(5,112,176)'])
+          .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.labs; }), 4)),
+          accessor: function(d) { return parseInt(d.properties.planned / d.properties.labs); }
+      });
+      
+      new Vis.Views.TimeEmulator({ 
+        el: '#time-emulator-view', 
+        model: this.model});
+      
     },
 
-    updateSwitch: function() {  
-      var file = this.model.get("data").file.split(".")[0];
-      $(this.$el).find("#switch-dataset a").removeClass("selected");
-      $(this.$el).find("#" + file).addClass("selected");
+    getBins: function(max, nbBins) {
+      var pow = Math.pow(10, Math.floor(Math.log(max / nbBins) / Math.LN10 + 1) - 1);
+      var width = parseInt((max / nbBins) / pow) * pow;
+      return d3.range(1, nbBins).map(function(d) { return d * width; });
     }
   });

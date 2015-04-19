@@ -33,22 +33,15 @@ Vis.Collections.App = Backbone.Collection.extend({
             })   
         },
         that.url + Vis.DEFAULTS.PREF_NAME_CENTROID)
-      // load substance type look up table from csv
-      /*
+      // load admin boundaries json (topojson) file
       .defer(
         function(url, callback) { 
-          d3.csv(url, function(error, result) { 
+          d3.json(url, function(error, result) { 
             callback(error, result); 
-          })
-            //convert and coerce csv to json on the fly
-            .row(function(d) { 
-              return {
-                id: +d.id,
-                name: d.name,
-              }
           })   
-      },
-      that.url + Vis.DEFAULTS.RDN)
+        },
+        that.url + Vis.DEFAULTS.PREF_GEOJSON)
+      /*
       // load foofstuff type look up table from semi colon (foodstuff names already use ,)
       .defer(
         function(url, callback) { 
@@ -69,32 +62,19 @@ Vis.Collections.App = Backbone.Collection.extend({
       .await(_ready);
 
     // on success
-    function _ready(error, withNameCentroid) {
-      /*
-      var distances = name_centroid.map(function(d) { 
-        var from = Vis.DEFAULTS.COORDINATES_INCIDENT;
-        var to = [d.lat, d.lon];
-        return that.getDistance(from, to);
-      });
-      */
+    function _ready(error, withNameCentroid, prefectures) {
+     
       var withLabs = that.getLabs(withNameCentroid);
       var withCollectors = that.getCollectors(withLabs);
       var withPlanned = that.getPlanned(withCollectors);
       var withCollected = that.getCollected(withPlanned);
       var withAnalysed = that.getAnalysed(withCollected);
 
-      //var data = getSimulatedData(withNameCentroid);
-      /*
-      // Convert JSON structure to array with array index = id and array value = name
-      // to be further used as lookup tables
-      var rdnArray = new Array();
-      var foodstuffArray = new Array();
-      rdn.forEach(function(d) { rdnArray[d.id] = d.name; });
-      foodstuff.forEach(function(d) { foodstuffArray[d.id] = d.name; });
-      */
+      topojson.feature(prefectures, prefectures.objects.jpn_adm1_name_only)
 
       that.trigger("loaded", {
-        "data": withAnalysed
+        "data": withAnalysed,
+        "geometry": topojson.feature(prefectures, prefectures.objects.jpn_adm1_name_only)
       });
     }
   },

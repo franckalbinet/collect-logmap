@@ -27,7 +27,7 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
 
       this.chart = d3.parcoords()(this.chartId)
         .width(780)
-        .height(380)
+        .height(340)
         .margin({top: 30, left:0, bottom: 10,right: 10})
         .data(that.data)
         .shadows()
@@ -73,9 +73,6 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
     updateChart: function() {
       this.chart.brushReset();
       this.chart.unhighlight(this.chart.highlighted());
-      /*this.chart.clear("highlight");
-      this.chart.clear("foreground");
-      this.chart.clear("shadows");*/
       this.chart.data(this.data);
       this.chart.render();
     }
