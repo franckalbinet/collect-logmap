@@ -5,7 +5,8 @@ Vis.Views.App = Backbone.View.extend({
     
     initialize: function () {
       this.model.on("change:data", this.render, this);
-      this.colors = ['rgb(189,201,225)','rgb(116,169,207)','rgb(43,140,190)','rgb(4,90,141)']
+      this.colors = ['rgb(189,201,225)','rgb(116,169,207)','rgb(43,140,190)','rgb(4,90,141)'];
+      //this.colors = ['rgb(253,204,138)','rgb(252,141,89)','rgb(227,74,51)','rgb(179,0,0)'];
       //this.render();
     },
 
