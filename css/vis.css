@@ -26,7 +26,7 @@
 }
 
 .row {
-	margin-bottom: 0px;
+	margin-bottom: 10px;
 }
 
 .btn-primary .badge {
@@ -183,7 +183,7 @@ ul.pager a {
 
 /* Time emulator button */
 #time-emulator-view .btn {
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 }
 #time-emulator-view span.status {
 	display: inline-block;

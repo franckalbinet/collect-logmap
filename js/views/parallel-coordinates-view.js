@@ -40,13 +40,14 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
       var that = this;
 
       this.chart = d3.parcoords()(this.chartId)
-        .width(780)
+        .width(360)
         .height(340)
         .margin({top: 30, left:0, bottom: 10,right: 10})
         .data(that.data)
         .shadows()
         .detectDimensions()
-        .dimensions(["labs","analysed","planned","collected","collectors"])
+        //.dimensions(["labs","analysed","planned","collected","collectors"])
+        .dimensions(["planned","collected","analysed"])
         .render()
         .ticks(5)
         .brushMode("1D-axes")
