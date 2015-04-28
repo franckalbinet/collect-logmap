@@ -9,7 +9,6 @@ Vis.Views.Map = Backbone.View.extend({
 
     scale: null,
     accessor: null,
-    chartId: null,
     legendId: null,
     
     events: {
@@ -59,8 +58,6 @@ Vis.Views.Map = Backbone.View.extend({
 
       L.mapbox.accessToken = Vis.DEFAULTS.MAP_ACCESS_TOKEN;
       
-      //this.chartId = this.$el.find("[id$=-chart]").attr("id");
-
       this.map = L.mapbox.map(
         this.$el.attr("id"), 
         Vis.DEFAULTS.MAP_BACKGROUND,

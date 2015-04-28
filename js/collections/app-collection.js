@@ -1,7 +1,7 @@
 Vis.Collections.App = Backbone.Collection.extend({
   
   url: "data/",
-  
+ 
   initialize: function(options) {
     Backbone.off("loadData");
     Backbone.on("loadData", function() { this.loadData() }, this);
@@ -16,7 +16,6 @@ Vis.Collections.App = Backbone.Collection.extend({
 
     // load synchronously all files
     queue() 
-    
       // load data from csv
       .defer(
         function(url, callback) { 
@@ -41,33 +40,15 @@ Vis.Collections.App = Backbone.Collection.extend({
           })   
         },
         that.url + Vis.DEFAULTS.PREF_GEOJSON)
-      /*
-      // load foofstuff type look up table from semi colon (foodstuff names already use ,)
-      .defer(
-        function(url, callback) { 
-          that.dsv(url, function(error, result) { 
-            callback(error, result); 
-          })
-            //convert and coerce csv to json on the fly
-            .row(function(d) { 
-              return {
-                id: +d.id,
-                name: d.name.toLowerCase(),
-              }
-          })   
-      },
-      that.url + Vis.DEFAULTS.FOODSTUFF)
-      */  
       // synchronize
       .await(_ready);
 
     // on success
     function _ready(error, withNameCentroid, prefectures) {
-     
-      var withLabs = that.getLabs(withNameCentroid);
+      var withPlanned = that.getPlanned(withNameCentroid);
+      var withLabs = that.getLabs(withPlanned);
       var withCollectors = that.getCollectors(withLabs);
-      var withPlanned = that.getPlanned(withCollectors);
-      var withCollected = that.getCollected(withPlanned);
+      var withCollected = that.getCollected(withCollectors);
       var withAnalysed = that.getAnalysed(withCollected);
 
       topojson.feature(prefectures, prefectures.objects.jpn_adm1_name_only)
@@ -79,9 +60,8 @@ Vis.Collections.App = Backbone.Collection.extend({
     }
   },
 
+  /*
   getSimulatedData: function(data) {
-    var that = this;
-
     return 
       that.getAnalysed(
         that.getCollected(
@@ -93,64 +73,59 @@ Vis.Collections.App = Backbone.Collection.extend({
         )
       );
   },
+  */
 
   getLabs: function(data){
-    var that = this;
-
     var labs = [];
 
-    data.forEach(function(area) {
-      labs.push({
-        name: area.name,
-        lat: area.lat,
-        lon: area.lon,
-        labs: parseInt(that.random(Vis.DEFAULTS.MAX_LABS/20, Vis.DEFAULTS.MAX_LABS))
-      })
+    var scale = d3.scale.pow().exponent(0.1)
+      .domain([Vis.DEFAULTS.MIN_LABS, Vis.DEFAULTS.MAX_LABS])
+      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
+
+    data.forEach(function(item) {
+      item["labs"] = parseInt(scale.invert(item.planned));
+      labs.push(item);
     });
     return labs;
   },
 
   getCollectors: function(data){
-    var that = this;
-
     var collectors = [];
 
-    data.forEach(function(area) {
-      collectors.push({
-        name: area.name,
-        lat: area.lat,
-        lon: area.lon,
-        labs: area.labs,
-        collectors: parseInt(that.random(Vis.DEFAULTS.MAX_COLLECTORS/20, Vis.DEFAULTS.MAX_COLLECTORS))
-      })
+    var scale = d3.scale.pow().exponent(0.1)
+      .domain([Vis.DEFAULTS.MIN_COLLECTORS, Vis.DEFAULTS.MAX_COLLECTORS])
+      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
+
+    data.forEach(function(item) {
+      item["collectors"] = parseInt(scale.invert(item.planned));
+      collectors.push(item);
     });
     return collectors;
-
   },
 
+  // planned items interpolated from min to max based on centroids distance
   getPlanned: function(data) {
     var that = this;
 
-    var nameDistances = data.map(function(d) { 
+    var nameDistances = data.map(function(item) { 
         var from = Vis.DEFAULTS.COORDINATES_INCIDENT;
-        var to = [d.lat, d.lon];
-        return {name: d.name, distance: that.getDistance(from, to), labs: d.labs, collectors: d.collectors};
+        var to = [item.lat, item.lon];
+        item["distance"] = that.getDistance(from, to);
+        return item;
       });
 
     var maxDistance = d3.max(nameDistances, function(d) { return d.distance});
-    var extentDistance = d3.extent(nameDistances, function(d) { return d.distance});
-    
-    var scale = d3.scale.pow().exponent(0.1).range([Vis.DEFAULTS.MAX_PLANNED, Vis.DEFAULTS.MAX_PLANNED/50]).domain(extentDistance)
+    var extentDistance = d3.extent(nameDistances, function(d) { return d.distance});   
+    var scale = d3.scale.pow().exponent(0.1)
+      .range([Vis.DEFAULTS.MAX_PLANNED, Vis.DEFAULTS.MIN_PLANNED])
+      .domain(extentDistance);
 
-    var planned = nameDistances.map(function(d) {
-      var planned = scale(d.distance);
-      return {
-        name: d.name,
-        labs: d.labs,
-        collectors: d.collectors,
-        planned: parseInt(planned/100) * 100
-      }
+    var planned = nameDistances.map(function(item) {
+      item["planned"] = parseInt(scale(item.distance)/100) * 100;
+      return _.omit(item, ["distance", "lat", "lon"]);
+      //return item;
     });
+
     return planned;
   },
 
@@ -159,28 +134,24 @@ Vis.Collections.App = Backbone.Collection.extend({
 
     var collected = [];
     Vis.DEFAULTS.NB_PERIODS_SIMULATED.forEach(function(period) {
-      data.forEach(function(area) {
+      data.forEach(function(item) {
         var growthRateIndex = parseInt(that.random(0, Vis.DEFAULTS.GROWTH_RATES_SIMULATED.length));
         if (period == 0) {
-          collected.push({
-            name: area.name,
-            labs: area.labs,
-            collectors: area.collectors,
-            planned: area.planned,
-            period: period,
-            collected: parseInt(area.planned*that.random(0.1,0.2))
-          });
+          collected.push(
+            _.extend({
+              collected: parseInt(item.planned*that.random(0.1,0.2)),
+              period: period
+            }, item)
+          );
         } else {
           var n_1 = collected.filter(function(d) { 
-            return d.name == area.name && d.period == (period - 1) })[0].collected;
-          collected.push({
-            name: area.name,
-            labs: area.labs,
-            collectors: area.collectors,
-            planned: area.planned,
-            period: period,
-            collected: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](period) * that.random(0, area.planned - n_1))
-          });
+            return d.name == item.name && d.period == (period - 1) })[0].collected;
+          collected.push(
+            _.extend({
+              collected: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](period) * that.random(0, item.planned - n_1)),
+              period: period
+            }, item)
+          );
         } 
       })
     })
@@ -192,30 +163,23 @@ Vis.Collections.App = Backbone.Collection.extend({
 
     var analysed = [];
 
-    data.forEach(function(area) {
+    data.forEach(function(item) {
       var growthRateIndex = parseInt(that.random(0, Vis.DEFAULTS.GROWTH_RATES_SIMULATED.length));
-      if(area.period == 0) {
-        analysed.push({
-          name: area.name,
-          period: area.period,
-          planned: area.planned,
-          collected: area.collected,
-          analysed: parseInt(area.collected*that.random(0.1,0.2)),
-          labs: area.labs,
-          collectors: area.collectors
-        })
+      if(item.period == 0) {
+
+        analysed.push(
+          _.extend({analysed: parseInt(item.collected*that.random(0.1,0.2))}, item)
+        );
+
       } else {        
         var n_1 = analysed.filter(function(d) { 
-            return d.name == area.name && d.period == (area.period - 1) })[0].analysed;
-        analysed.push({
-          name: area.name,
-          period: area.period,
-          planned: area.planned,
-          collected: area.collected,
-          analysed: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](area.period) * that.random(0, area.collected - n_1)),
-          labs: area.labs,
-          collectors: area.collectors
-        })
+            return d.name == item.name && d.period == (item.period - 1) })[0].analysed;
+
+        analysed.push(
+          _.extend(
+            {analysed: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](item.period) * that.random(0, item.collected - n_1))}
+            , item)
+        );
       }
     });
     return analysed;
