@@ -49,7 +49,6 @@ Vis.Views.App = Backbone.View.extend({
         yTitle: "Nb. collected samples"
       });
 
-      
       new Vis.Views.Scatterplot({ 
         el: '#scatterplot-analysed-vs-labs',
         model: this.model,
@@ -60,6 +59,18 @@ Vis.Views.App = Backbone.View.extend({
         xTitle: "Nb. laboratories",
         yTitle: "Nb. analysed samples"
       });
+      /*
+      new Vis.Views.Scatterplot({ 
+        el: '#scatterplot-labs-vs-collectors',
+        model: this.model,
+        xScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_COLLECTORS]),
+        yScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_LABS]),
+        xAttr: "collectors",
+        yAttr: "labs",
+        xTitle: "Nb. collectors",
+        yTitle: "Nb. laboratories"
+      });
+      */
 
 
       /*
