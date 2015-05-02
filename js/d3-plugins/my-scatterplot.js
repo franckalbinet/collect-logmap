@@ -78,7 +78,7 @@ d3.myScatterPlotChart = function() {
             //.attr("clip-path", function(d,i) { return "url(#clip-"+i+")"; })
             //.style("fill", d3.rgb(230, 230, 230))
             .style('fill-opacity', 0)
-            .style('stroke-opacity', 0)
+            .style('stroke-opacity', 0.2)
             .style("stroke", d3.rgb(100,0,0));
 
         paths.selectAll("path")

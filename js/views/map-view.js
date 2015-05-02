@@ -125,6 +125,7 @@ Vis.Views.Map = Backbone.View.extend({
         .attr("d", path)
         .attr("class", "choropleth")
         .style("fill", function(d) { 
+          //console.log("in enter");
           return that.scale(that.accessor(d)); })
         .on("mouseover", function(d) {
           Backbone.trigger("featureIn", [d.id]);
@@ -140,8 +141,10 @@ Vis.Views.Map = Backbone.View.extend({
 
       // if same size
       //paths.attr("d", path)
+      /*
       paths
-        .style("fill", function(d) { 
+        .style("fill", function(d) {
+          //console.log("in update"); 
           return that.scale(that.accessor(d)); })
         .style("fill-opacity", function(d) {
           var opacity = 0.7;
@@ -150,5 +153,6 @@ Vis.Views.Map = Backbone.View.extend({
           }
           return opacity;
         });
+      */
     }
   });

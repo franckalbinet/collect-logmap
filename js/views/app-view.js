@@ -16,6 +16,7 @@ Vis.Views.App = Backbone.View.extend({
       $("#data-loading").css("display", "none");
       this.$el.css("display", "block");
 
+      new Vis.Views.ParallelCoordinatesRefactored({ el: '#parallel-coordinates-refactored-view', model: this.model});
       new Vis.Views.ParallelCoordinates({ el: '#parallel-coodinates-view', model: this.model});
 
       new Vis.Views.Map({ 
@@ -27,7 +28,8 @@ Vis.Views.App = Backbone.View.extend({
         accessor: function(d) { return parseInt(d.properties.collected * 100 / d.properties.planned); },
         legendTitle: "In %"
       });
-
+      
+      /*
       new Vis.Views.Map({ 
         el: '#map-analysed-vs-collected', 
         model: this.model,
@@ -37,7 +39,8 @@ Vis.Views.App = Backbone.View.extend({
         accessor: function(d) { return parseInt(d.properties.analysed * 100 / d.properties.collected); },
         legendTitle: "Analysed / Collected in %"
       });
-
+      */
+      
       new Vis.Views.Scatterplot({ 
         el: '#scatterplot-collected-vs-collectors',
         model: this.model,
