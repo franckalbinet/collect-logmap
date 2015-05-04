@@ -47,7 +47,48 @@ d3.myParallelCoordinates = function() {
       _render();
 
       function _render() {
-        
+
+        // create Voronoi -- for smarter line hovering, ref to http://bl.ocks.org/njvack/1405439
+        if (!g.select(".voronois").empty()) g.select(".voronois").remove();
+        var voronois = g.append("g").attr("class", "voronois");
+
+        var voronoi = d3.geom.voronoi()
+          .x(function(d) { 
+            return x(d.key); })
+          .y(function(d) { return y[d.key](d.value); })
+          .clipExtent([[0, 0], [_gWidth, _gHeight]]);
+
+        var points = [];
+        data.forEach(function(d) {
+          dimensions.forEach(function(p) {
+            points.push({name: d.name, key: p, value: d[p]}); 
+          })
+        });
+
+        voronois.selectAll("path")
+            .data(voronoi(points))
+          .enter().append("path")
+            .attr("d", function(d) { 
+              if(d !== undefined) return "M" + d.join(",") + "Z"; 
+            })
+            .style('fill-opacity', 0)
+            .style('stroke-opacity', 0)
+            .style("stroke", d3.rgb(100,0,0));
+
+        voronois.selectAll("path")
+          .on("mouseover", function(d, i) {
+            _listeners.hovered(d.point.name); 
+            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible")
+          })
+          .on("mouseout", function(d, i) {
+            _listeners.hovered(null);
+            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "hidden");
+          })
+          .on("mousemove", function(d) {
+            Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+          });  
+       
+
         // EXIT - ENTER - UPDATE PATTERN
         // join data 
         var lines = _gLines.selectAll("path")
@@ -60,18 +101,20 @@ d3.myParallelCoordinates = function() {
         // if new dataset is larger
         lines
           .enter().append("path")
-            .attr("d", _path)
+            .attr("d", _path);
+            /*
             .on("mouseover", function(d) {
               _listeners.hovered(d.name); 
               Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "visible");
             })
             .on("mouseout", function(d, i) {
               _listeners.hovered(null);
-               Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
+              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
             })
             .on("mousemove", function(d) {
               Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
             });
+            */
 
         // if new dataset same size
         lines
