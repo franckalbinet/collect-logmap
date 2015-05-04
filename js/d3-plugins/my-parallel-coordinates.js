@@ -102,20 +102,7 @@ d3.myParallelCoordinates = function() {
         lines
           .enter().append("path")
             .attr("d", _path);
-            /*
-            .on("mouseover", function(d) {
-              _listeners.hovered(d.name); 
-              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "visible");
-            })
-            .on("mouseout", function(d, i) {
-              _listeners.hovered(null);
-              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
-            })
-            .on("mousemove", function(d) {
-              Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-            });
-            */
-
+           
         // if new dataset same size
         lines
           .style("stroke", function(d) {

@@ -69,6 +69,23 @@ d3.myScatterPlotChart = function() {
           .on("mouseover", function(d, i) {
             _listeners.hovered(d.point.name); 
             Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible");
+            
+            /*            
+            delete path
+            if highlight
+            then draw line
+
+            g.append("path").attr("class")
+            x(d.point[xAttr])
+            y(d.point[yAttr])
+
+            d3.select("#scatterplot-collected-vs-collectors svg")
+              .append("path")
+              .attr("d", "M50 50 H200V200")
+              .style("stroke", "#000")
+              .style("stroke-width", "2px")
+              .style("fill", "none");
+            */
           })
           .on("mouseout", function(d, i) {
             _listeners.hovered(null);
@@ -77,7 +94,20 @@ d3.myScatterPlotChart = function() {
           .on("mousemove", function(d) {
             Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
           });
-                     
+          
+        // coordinates path
+        g.select(".coord-path").remove();    
+        if (highlight) {
+          var point = data.filter(function(d) {return d.name === highlight;})[0];    
+          g.append("path")
+            .attr("class", "coord-path")
+            .attr("d", "M" + x(0) + " " + y(point[yAttr]) + "H" + x(point[xAttr]) + "V" + y(0)) 
+            .style("stroke", "rgba(0,0,0,0.5)")
+            .style("stroke-width", "1px")
+            .style("fill", "none")
+            .style("stroke-dasharray","2,2")
+            .style("shape-rendering", "crispEdges");
+        }
 
         // EXIT - ENTER - UPDATE PATTERN for points
         // join data and dots
@@ -148,6 +178,7 @@ d3.myScatterPlotChart = function() {
             .attr("class", "label")
             .attr("x", _gWidth)
             .attr("y", -6)
+            .style("font-size", "11px")
             .style("text-anchor", "end")
             .text(xTitle);
 
@@ -159,28 +190,10 @@ d3.myScatterPlotChart = function() {
             .attr("class", "label")
             .attr("transform", "rotate(-90)")
             .attr("y", 6)
+            .style("font-size", "10px")
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text(yTitle);
-
-        /*    
-        _gBrush = g.append("g").attr("class", "brush").call(brush);
-        _gBrush.selectAll("rect").attr("height", _gHeight); 
-        _gBrush.selectAll(".resize rect")
-          .style("visibility", "visible")
-          .attr("width", "2px")
-          .attr("x", "-1px");
-
-
-        // listening & throttling brush events in order not to overload browser
-        var _throttled = _.throttle(_listeners.filtering, 0);
-        brush.on("brush", function() { 
-          _render();
-          //_listeners.filtering(brush);
-          _throttled(brush); 
-        });
-        brush.on("brushend", function() { _listeners.filtered(brush); });
-        */
       } 
     });
 

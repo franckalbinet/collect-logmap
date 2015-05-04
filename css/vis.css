@@ -415,7 +415,7 @@ path.choropleth {
 	z-index: 1;
 	bottom: 0px;
 	right: 15px;
-	background: rgba(255,255,255, 0.6);
+	background: rgba(255,255,255,0.6);
 	border-radius: 3px;	
 }
 .legend .title{
