@@ -5,6 +5,11 @@
     .width()
     .height() 
     .margins() - ex: marginss({top: 10, right: 25, bottom: 30, left: 20})
+    .data()
+    .dimensions() - ex: ["planned", "collected", "analysed"]
+    .x()
+    .y()
+    .highlight()
 */
 
 d3.myParallelCoordinates = function() {
@@ -13,6 +18,7 @@ d3.myParallelCoordinates = function() {
       height = 100,
       margins = {top: 10, right: 25, bottom: 30, left: 20},
       data = null,
+      highlight = null,
       dimensions = [],
       x = d3.scale.ordinal(),
       y = {};
@@ -24,7 +30,7 @@ d3.myParallelCoordinates = function() {
       _gLines,
       _gDimensions,
       _line = d3.svg.line(),
-      _listeners = d3.dispatch("filtered", "filtering");
+      _listeners = d3.dispatch("hovered");
 
   function chart(div) {
     
@@ -46,7 +52,6 @@ d3.myParallelCoordinates = function() {
         // join data 
         var lines = _gLines.selectAll("path")
           .data(data, function(d) {
-            //console.log(this);
             return d.name + "-" + d.period});
 
         // if new dataset is smaller than the old one  -- remove
@@ -55,8 +60,35 @@ d3.myParallelCoordinates = function() {
         // if new dataset is larger
         lines
           .enter().append("path")
-            .attr("d", _path);
+            .attr("d", _path)
+            .on("mouseover", function(d) {
+              _listeners.hovered(d.name); 
+              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "visible");
+            })
+            .on("mouseout", function(d, i) {
+              _listeners.hovered(null);
+               Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
+            })
+            .on("mousemove", function(d) {
+              Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+            });
 
+        // if new dataset same size
+        lines
+          .style("stroke", function(d) {
+            var stroke = d3.rgb(4, 90, 141);
+            if (highlight) {
+              stroke = (d.name === highlight) ? d3.rgb(4, 90, 141) : d3.rgb(210, 210, 210);
+            }
+            return stroke;
+          })
+          .style("stroke-width", function(d) {
+            var strokeWidth = 0.4;
+            if (highlight) {
+              strokeWidth = (d.name === highlight) ? 1.5 : 0.4;
+            }
+            return strokeWidth;
+          })
         
         // returns the path for a given data point
         function _path(d) {
@@ -138,6 +170,11 @@ d3.myParallelCoordinates = function() {
   chart.data = function(_) {
     if (!arguments.length) return data;
     data = _;
+    return chart;
+  };
+  chart.highlight = function(_) {
+    if (!arguments.length) return highlight;
+    highlight = _;
     return chart;
   };
   chart.dimensions = function(_) {

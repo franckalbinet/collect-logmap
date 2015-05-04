@@ -305,49 +305,26 @@ a:hover, .dropdown-menu > .active > a:focus {
 
 /* Charts & map */
 
-
-/* // coordinaates chart */
-#parallel-coordinates-view {
-	height: 340px;
-}
-.parcoords text.label {
-	cursor: move;
-}
-g.dimension text.label {
-	font-size: 11px;
-	font-weight: bold;
-	text-transform: uppercase;
-}
-#parallel-coodinates-view g.resize rect {
-	fill: rgba(187, 48, 48, 0.9);
-}
-.parcoords rect.extent {
-	fill: rgba(0, 0, 0, 0.2);
-	stroke: rgba(158, 41, 41, 0);
-}
-
-#parallel-coordinates-refactored-chart .lines path {
+#parallel-coordinates-chart .lines path {
 	fill: none;
   stroke: rgb(4, 90, 141);
   stroke-width: 0.4;
   stroke-opacity; 0.2;
 }
 
-#parallel-coordinates-refactored-chart .axis text {
+#parallel-coordinates-chart .axis text {
 	text-transform: uppercase;
 	font-size: 11px;
 	font-weight: bold;
 }
-#parallel-coordinates-refactored-chart .axis .tick text {
+#parallel-coordinates-chart .axis .tick text {
 	font-weight: normal;
 	text-transform: normal;
 	font-size: 10px;
 }
-#parallel-coordinates-refactored-chart .axis path {
+#parallel-coordinates-chart .axis path {
 	stroke: #555;
 }
-
-
 
 /* Map Leaflet */
 .map {

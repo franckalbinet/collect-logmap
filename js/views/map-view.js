@@ -38,12 +38,21 @@ Vis.Views.Map = Backbone.View.extend({
         that.render();
       });
 
-      Backbone.on("pcBrushing featureIn featureOut", 
-        function(selected) { 
-          this.selected = selected;
-          that.render();
+      // trigger event on feature hovering to sync other charts
+      this.choropleth.on("hovered", 
+        function(featureId) {        
+          Backbone.trigger("hovered:choropleth", {name: featureId});
+        }
+      );
+
+      Backbone.on("hovered:scatterplot hovered:parallelCoordinates hovered:choropleth", 
+        function(d) {
+          this.choropleth.highlight(d.name);
+          this.render();
         }
       ,this);
+
+
     },
 
     joinGeomData: function(period) {
@@ -71,15 +80,14 @@ Vis.Views.Map = Backbone.View.extend({
         }
       ).setView(Vis.DEFAULTS.MAP_FOCUS.center, Vis.DEFAULTS.MAP_FOCUS.zoom);
 
-      // To be put in a separate file
-      // Initialize the SVG layer 
-      this.map._initPathRoot();
-      
-      // Pick up the SVG form the map object
-      var svg = d3.select("#" + this.$el.attr("id")).select("svg");
-      this.g = svg.append("g");
+      // init choropleth layer
+      this.choropleth = d3.myChoroplethLayer()
+        .map(this.map)
+        .data(this.features)
+        .scale(this.scale)
+        .accessor(this.accessor);
 
-      that.render();
+      this.render();
 
       this.map.on("moveend", function() {
         that.model.set("zoomLevel", that.map.getZoom());
@@ -87,7 +95,7 @@ Vis.Views.Map = Backbone.View.extend({
       });
 
       // Legend
-      this.legend = d3.myLegendChoropleth()
+      this.legend = d3.myChoroplethLegend()
         .width(130)
         .height(50)
         .margins({top: 10, right: 40, bottom: 0, left: 10})
@@ -105,54 +113,6 @@ Vis.Views.Map = Backbone.View.extend({
     },
 
     render: function() {
-      var that = this;
-      // Define the d3 projection 
-      var path = d3.geo.path().projection(function project(x) {
-          var point = that.map.latLngToLayerPoint(new L.LatLng(x[1], x[0]));
-          return [point.x, point.y];
-      });
-
-      // Data join
-      var paths = that.g.selectAll("path")
-          .data(that.features, function(d) { 
-            return d.id + "-" + that.model.get("zoomLevel"); });
-
-      // if new dataset is smaller than the old one  -- remove
-      paths.exit().remove();
-
-      // if new dataset is larger
-      paths.enter().append("path")
-        .attr("d", path)
-        .attr("class", "choropleth")
-        .style("fill", function(d) { 
-          //console.log("in enter");
-          return that.scale(that.accessor(d)); })
-        .on("mouseover", function(d) {
-          Backbone.trigger("featureIn", [d.id]);
-          Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "visible");
-        })
-        .on("mouseout", function(d) {
-          Backbone.trigger("featureOut", []);
-          Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "hidden");
-        })
-        .on("mousemove", function(d) {
-          Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-        })
-
-      // if same size
-      //paths.attr("d", path)
-      /*
-      paths
-        .style("fill", function(d) {
-          //console.log("in update"); 
-          return that.scale(that.accessor(d)); })
-        .style("fill-opacity", function(d) {
-          var opacity = 0.7;
-          if (that.selected.length != 0) {
-            opacity = (_.contains(that.selected, d.id)) ? 0.7 : 0;
-          }
-          return opacity;
-        });
-      */
+      d3.select("#" + this.$el.attr("id")).call(this.choropleth); 
     }
   });

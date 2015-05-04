@@ -1,20 +1,7 @@
 /* 
   CREATE SCATTERPLOT INSTANCE
   Setters and getters:
-    .width()
-    .height() 
-    .margins() - ex: margins({top: 10, right: 25, bottom: 30, left: 20})
-    .data() 
-    .xAttr()
-    .yAttr()
-    .x() - ex: x(d3.scale.sqrt().domain([myDomain])) range is deduced from witdh and margins
-    .y() - ex: y(d3.scale.sqrt().domain([myDomain])) range is deduced from height and margins
-    .xTitle()
-    .yTitle()
-    .xAxis()
-    .yAxis()
-    .clearBrush() - without argument. Clear brush as name indicates
-    .setBrush() - passing [rangeMin, rangeMax] will set the brush and trigger brush events
+    ...
 */
 
 d3.myScatterPlotChart = function() {
@@ -22,8 +9,8 @@ d3.myScatterPlotChart = function() {
   var width = 400,
       height = 100,
       margins = {top: 10, right: 25, bottom: 30, left: 20},
-
-      //group = null,
+      data = null,
+      highlight = null,
       x = null,
       y = null,
       xAttr = null,
@@ -31,15 +18,14 @@ d3.myScatterPlotChart = function() {
       xTitle = null,
       yTitle = null,
       xAxis = d3.svg.axis().orient("bottom"), 
-      yAxis = d3.svg.axis().orient("left"),
-      brush = d3.svg.brush();
+      yAxis = d3.svg.axis().orient("left");
 
   var _gWidth = 400,
       _gHeight = 100,
       _gPoints,
       _gBrush,
       _gYAxis,
-      _listeners = d3.dispatch("filtered", "filtering");
+      _listeners = d3.dispatch("hovered");
 
   function chart(div) {
     _gWidth = width - margins.left - margins.right;
@@ -75,36 +61,25 @@ d3.myScatterPlotChart = function() {
             })
             .attr("id", function(d,i) { 
               return "path-"+i; })
-            //.attr("clip-path", function(d,i) { return "url(#clip-"+i+")"; })
-            //.style("fill", d3.rgb(230, 230, 230))
             .style('fill-opacity', 0)
-            .style('stroke-opacity', 0.2)
+            .style('stroke-opacity', 0)
             .style("stroke", d3.rgb(100,0,0));
 
         paths.selectAll("path")
           .on("mouseover", function(d, i) {
-            //d3.select(this)
-            //.style('fill', d3.rgb(31, 120, 180));
-            g.selectAll(".dots")
-              .attr("fill-opacity", 0.2);
-            g.select("circle#point-"+i)
-              .attr("fill-opacity", 1)
-              .transition()
-              .duration("100")
-              .attr("r", 8);
+            var name = g.select("circle#point-"+i)[0][0].__data__.name;
+            _listeners.hovered(name); 
+            Vis.DEFAULTS.D3_TOOLTIP.html(name).style("visibility", "visible");
           })
           .on("mouseout", function(d, i) {
-            //d3.select(this)
-            //.style("fill", d3.rgb(230, 230, 230));
-            g.selectAll(".dots")
-              .attr("fill-opacity", 1);
-            g.select("circle#point-"+i)
-              .transition()
-              .duration("500")
-              .attr("r", 3);
+            var name = g.select("circle#point-"+i)[0][0].__data__.name;
+            _listeners.hovered(null);
+            Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
+          })
+          .on("mousemove", function(d) {
+            Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
           });
-        
-             
+                     
         // EXIT - ENTER - UPDATE PATTERN for points
         // join data and dots
         var dots = _gPoints.selectAll("circle")
@@ -125,6 +100,23 @@ d3.myScatterPlotChart = function() {
           .style("fill", "steelblue");
          
         // if new dataset same size
+        dots
+          .style("fill-opacity", function(d) {
+            var opacity = 1;
+            if (highlight) {
+              opacity = (d.name === highlight) ? 1 : 0.2;
+            }
+            return opacity;
+          })
+          .transition()
+          .duration("100")
+          .attr("r", function(d) {
+            var radius = 3;
+            if (highlight) {
+              radius = (d.name === highlight) ? 8 : 3;
+            }
+            return radius;
+          })
       }
 
       function _skeleton(){
@@ -217,6 +209,11 @@ d3.myScatterPlotChart = function() {
     data = _;
     return chart;
   };
+  chart.highlight = function(_) {
+    if (!arguments.length) return highlight;
+    highlight = _;
+    return chart;
+  };
   chart.xAttr = function(_) {
     if (!arguments.length) return xAttr;
     xAttr = _;
@@ -247,11 +244,6 @@ d3.myScatterPlotChart = function() {
     yTitle = _;
     return chart;
   };
-  chart.barWidth = function(_) {
-    if (!arguments.length) return barWidth;
-    barWidth = _;
-    return chart;
-  };
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
     xAxis = _;
@@ -260,21 +252,6 @@ d3.myScatterPlotChart = function() {
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
-    return chart;
-  };
-  chart.clearBrush= function(_) {
-    if (!arguments.length) {
-      _gBrush.call(brush.clear());
-      brush.event(_gBrush);
-    }
-    return chart;
-  };
-  chart.setBrush= function(_) {
-    if (arguments.length) {
-      _gBrush.call(brush.extent(_));
-      // trigger programmatically brush event
-      brush.event(_gBrush);
-    }
     return chart;
   };
   chart.on = function (event, listener) {

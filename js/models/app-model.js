@@ -1,15 +1,11 @@
 Vis.Models.App = Backbone.Model.extend({
 
-  //logBin: null,
-
   defaults: {
     data: null,
     timeBtnStatus: "pause", // "pause" or "play"
     period: 0,
     zoomLevel: 0
   },
-
-  //histBounds: null,
 
   initialize: function () {
     this.set("zoomLevel", Vis.DEFAULTS.MAP_FOCUS.zoom);
@@ -21,7 +17,6 @@ Vis.Models.App = Backbone.Model.extend({
     var that = this;
 
     data["lookup"] = this.buildLookup(data);
-
     // update model
     this.set("data", data);
   },

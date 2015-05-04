@@ -98,6 +98,13 @@
 
       <div class="row">
 
+        <div class="col-md-4 section" id="parallel-coordinates-view">
+          <div class="title">Data collection & analysis profiles </div>
+          <div class="content">
+            <div class="" id="parallel-coordinates-chart">
+            </div>
+          </div> 
+        </div>
         <div class="col-md-4 section">
           <div class="title">Collected / Planned </div>
           <div class="content">
@@ -106,19 +113,12 @@
             </div>  
           </div> 
         </div>  
-
         <div class="col-md-4 section">
           <div class="title">Analysed / Collected </div>
           <div class="content">
             <div class="map" id="map-analysed-vs-collected">
                <div class='legend' id="legend-analysed-vs-collected"></div>
             </div>
-          </div> 
-        </div>
-
-        <div class="col-md-4 section" id="parallel-coodinates-view">
-          <div class="title">Data collection & analysis profiles<a href="#" class="btn btn-default btn-xs pull-right reset">Reset</a></div>
-          <div class="content parcoords" id="parallel-coordinates-chart">   
           </div> 
         </div>
       </div>
@@ -130,52 +130,24 @@
       </div>  
 
       <div class="row">
-        <div class="col-md-4 section">
+        
+        <div class="col-md-6 section">
           <div class="title">Collected / Collectors </div>
           <div class="content">
             <div class="" id="scatterplot-collected-vs-collectors">
             </div>
           </div> 
         </div>
-
-        <div class="col-md-4 section">
+        <div class="col-md-6 section">
           <div class="title">Analysed / Laboratories </div>
           <div class="content">
             <div class="" id="scatterplot-analysed-vs-labs">
             </div>
           </div> 
         </div>
-
-        <div class="col-md-4 section" id="parallel-coordinates-refactored-view">
-          <div class="title">Refactored PC </div>
-          <div class="content">
-            <div class="" id="parallel-coordinates-refactored-chart">
-            </div>
-          </div> 
-        </div>
       </div>
 
-      <!--
-      <div class="row">
-        <div class="col-md-4 section">
-          <div class="title">Planned / Collectors </div>
-          <div class="content">
-            <div class="map" id="map-planned-vs-collectors">
-              <div class='legend' id="legend-planned-vs-collectors"></div>
-            </div>
-          </div> 
-        </div>
-
-        <div class="col-md-4 section">
-          <div class="title">Planned / Labs </div>
-          <div class="content">
-            <div class="map" id="map-planned-vs-labs">
-               <div class='legend' id="legend-plannned-vs-labs"></div>
-            </div>
-          </div> 
-        </div>
-      </div>
-    -->
+  
 
       <!-- Footer -->
       <div class="row">
@@ -252,7 +224,8 @@
     -->
     <script src="js/d3-plugins/my-scatterplot.js"></script>
     <script src="js/d3-plugins/my-parallel-coordinates.js"></script>
-    <script src="js/d3-plugins/my-legend-choropleth.js"></script>
+    <script src="js/d3-plugins/my-choropleth-legend.js"></script>
+    <script src="js/d3-plugins/my-choropleth-layer.js"></script>
 
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
@@ -262,7 +235,7 @@
     <script src='bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js'></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
-    <script src='bower_components/parallel-coordinates/d3.parcoords.js'></script>
+    <!--<script src='bower_components/parallel-coordinates/d3.parcoords.js'></script>-->
     <script src="js/app.js"></script>
     <script src="js/models/app-model.js"></script>
     <script src="js/views/app-view.js"></script>
@@ -270,7 +243,7 @@
     <script src="js/views/scatterplot-view.js"></script>
     <script src="js/views/time-emulator-view.js"></script>
     <script src="js/views/parallel-coordinates-view.js"></script>
-    <script src="js/views/parallel-coordinates-refactored-view.js"></script>
+    <!--<script src="js/views/parallel-coordinates-refactored-view.js"></script>-->
     <script src="js/routers/app-router.js"></script>
     <script src="js/collections/app-collection.js"></script>
     <!--

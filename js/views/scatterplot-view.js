@@ -35,23 +35,23 @@ Vis.Views.Scatterplot = Backbone.View.extend({
 
       this.data = this.model.get("data").data.filter(function(d) {return d.period == 0});
       this.initChart();
+    
+      // trigger event on point hovering to sync other charts
+      this.chart.on("hovered", 
+        function(featureId) {        
+          Backbone.trigger("hovered:scatterplot", {name: featureId});
+        }
+      );
+
+      // update points appearance on other/own charts hovering
+      Backbone.on("hovered:scatterplot hovered:parallelCoordinates hovered:choropleth", 
+        function(d) {
+          this.chart.highlight(d.name);
+          this.render();
+        }
+      ,this);
 
       this.render();
-
-      /*
-      Backbone.on("featureIn featureOut", function(selected) {
-          this.updateChart();
-          if (selected.length != 0) {
-            this.highlighted = this.data.filter(function(d) { return d.name == selected[0]; }),
-            this.chart.highlight(this.highlighted);
-          } else {
-            this.chart.unhighlight(this.highlighted);
-          }
-        }
-        ,this
-      );
-      */
-      
     },
 
     render: function() {
@@ -62,8 +62,8 @@ Vis.Views.Scatterplot = Backbone.View.extend({
       var that = this;
       
       this.chart = d3.myScatterPlotChart()
-        //.width(555)
-        .width(360)
+        //.width(360)
+        .width(555)
         .height(300)
         .margins({top: 20, right: 20, bottom: 20, left: 40})
         .data(that.data)

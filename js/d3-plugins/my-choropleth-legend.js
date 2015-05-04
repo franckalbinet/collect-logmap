@@ -7,7 +7,7 @@
     .colorScale()
 */
 
-d3.myLegendChoropleth = function() {
+d3.myChoroplethLegend = function() {
 
   var width = 400,
       height = 100,
