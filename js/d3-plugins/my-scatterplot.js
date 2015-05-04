@@ -67,19 +67,18 @@ d3.myScatterPlotChart = function() {
 
         paths.selectAll("path")
           .on("mouseover", function(d, i) {
-            var name = g.select("circle#point-"+i)[0][0].__data__.name;
-            _listeners.hovered(name); 
-            Vis.DEFAULTS.D3_TOOLTIP.html(name).style("visibility", "visible");
+            _listeners.hovered(d.point.name); 
+            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible");
           })
           .on("mouseout", function(d, i) {
-            var name = g.select("circle#point-"+i)[0][0].__data__.name;
             _listeners.hovered(null);
-            Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
+            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "hidden");
           })
           .on("mousemove", function(d) {
             Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
           });
                      
+
         // EXIT - ENTER - UPDATE PATTERN for points
         // join data and dots
         var dots = _gPoints.selectAll("circle")

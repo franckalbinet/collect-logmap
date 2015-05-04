@@ -49,41 +49,6 @@
         <p class="lead">Visualize, explore and conduct gap analysis</p>
       </div>
 
-      <!-- Summary statistics -->
-      <!--
-      <div class="row">
-        <div class="col-md-12" id="data-summary-view">
-          <hr>
-          <div class="row" >
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-12">
-                  <span class="data" id="selected"></span>measurements selected out of<span class="data" id="all"></span>from<span class="data" id="from"></span>to<span class="data" id="to"></span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="col-md-3">
-                  Min: <span class="data" id="min"></span>
-                </div>
-                <div class="col-md-3">
-                  Median: <span class="data" id="median"></span>
-                </div>
-                <div class="col-md-3">
-                  Mean: <span class="data" id="mean"></span>
-                </div>
-                <div class="col-md-3">
-                  Max: <span class="data" id="max"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <hr>
-        </div>
-      </div>
-    -->
-      
       <div class="row">
         <div class="col-md-12 text-center" id="time-emulator-view">
           <a href="#" class="btn btn-primary btn-sm play"> <span class="glyphicon glyphicon-play" aria-hidden="true"></span> <span class="status">Play</span> <span class="badge"></span></a>
@@ -147,8 +112,6 @@
         </div>
       </div>
 
-  
-
       <!-- Footer -->
       <div class="row">
         <div class="col-md-12" id="footer">
@@ -167,7 +130,6 @@
                 <li><h3>Credits</h3></li>
                 <li>Mapbox.js</li>
                 <li>D3.js</li>
-                <li>Parallel coordinates (Syntagmatic)</li>
                 <li>Backbone.js</li>
                 <li>Twitter Bootstrap</li>
                 <li>underscore.js</li>
@@ -214,14 +176,7 @@
     <script src='js/vendor/Control.MiniMap.js'></script>
 
     <script src="bower_components/d3/d3.min.js"></script>
-    <!--
-    <script src="js/d3-plugins/my-barchart.js"></script>
-    <script src="js/d3-plugins/my-histogram.js"></script>
-    <script src="js/d3-plugins/my-rowchart.js"></script>
-    <script src="js/d3-plugins/my-hexbin-layer.js"></script>
-    <script src="js/d3-plugins/vendor/hexbin.js"></script>
-    <script src="bower_components/crossfilter/crossfilter.min.js"></script>
-    -->
+  
     <script src="js/d3-plugins/my-scatterplot.js"></script>
     <script src="js/d3-plugins/my-parallel-coordinates.js"></script>
     <script src="js/d3-plugins/my-choropleth-legend.js"></script>
@@ -235,7 +190,6 @@
     <script src='bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js'></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
-    <!--<script src='bower_components/parallel-coordinates/d3.parcoords.js'></script>-->
     <script src="js/app.js"></script>
     <script src="js/models/app-model.js"></script>
     <script src="js/views/app-view.js"></script>
@@ -243,17 +197,8 @@
     <script src="js/views/scatterplot-view.js"></script>
     <script src="js/views/time-emulator-view.js"></script>
     <script src="js/views/parallel-coordinates-view.js"></script>
-    <!--<script src="js/views/parallel-coordinates-refactored-view.js"></script>-->
     <script src="js/routers/app-router.js"></script>
     <script src="js/collections/app-collection.js"></script>
-    <!--
-    <script src="js/views/substance-type-view.js"></script>
-    <script src="js/views/hist-concentration-view.js"></script>
-    <script src="js/views/count-time-view.js"></script>
-    <script src="js/views/foodstuff-type-view.js"></script>
-    <script src="js/views/data-summary-view.js"></script>
-    <script src="js/views/data-list-view.js"></script>
-    -->
    
     <script>
       Vis.initialize();    
