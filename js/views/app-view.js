@@ -6,8 +6,6 @@ Vis.Views.App = Backbone.View.extend({
     initialize: function () {
       this.model.on("change:data", this.render, this);
       this.colors = ['rgb(189,201,225)','rgb(116,169,207)','rgb(43,140,190)','rgb(4,90,141)'];
-      //this.colors = ['rgb(253,204,138)','rgb(252,141,89)','rgb(227,74,51)','rgb(179,0,0)'];
-      //this.render();
     },
 
     render: function() {
@@ -17,7 +15,6 @@ Vis.Views.App = Backbone.View.extend({
       this.$el.css("display", "block");
 
       new Vis.Views.ParallelCoordinates({ el: '#parallel-coordinates-view', model: this.model});
-      //new Vis.Views.ParallelCoordinates({ el: '#parallel-coodinates-view', model: this.model});
 
       new Vis.Views.Map({ 
         el: '#map-collected-vs-planned',
@@ -60,48 +57,7 @@ Vis.Views.App = Backbone.View.extend({
         xTitle: "Nb. laboratories",
         yTitle: "Nb. analysed samples"
       });
-      /*
-      new Vis.Views.Scatterplot({ 
-        el: '#scatterplot-labs-vs-collectors',
-        model: this.model,
-        xScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_COLLECTORS]),
-        yScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_LABS]),
-        xAttr: "collectors",
-        yAttr: "labs",
-        xTitle: "Nb. collectors",
-        yTitle: "Nb. laboratories"
-      });
-      */
-
-
-      /*
-      new Vis.Views.Map({ 
-        el: '#map-planned-vs-collectors', 
-        model: this.model,
-        scale: d3.scale.threshold()
-          .range(that.colors)
-          .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.collectors; }), 4)),
-        accessor: function(d) { return parseInt(d.properties.planned / d.properties.collectors); },
-        legendTitle: "In samples per collector"
-      });
-      */
-    
-        
-
-
-
-      /*
-      new Vis.Views.Map({ 
-        el: '#map-planned-vs-labs', 
-        model: this.model,
-        scale: d3.scale.threshold()
-          .range(that.colors)
-          .domain(that.getBins( d3.max(this.model.get("data").data, function(d) { return d.planned/d.labs; }), 4)),
-          accessor: function(d) { return parseInt(d.properties.planned / d.properties.labs); },
-          legendTitle: "Samples per lab."
-      });
-      */
-      
+          
       new Vis.Views.TimeEmulator({ 
         el: '#time-emulator-view', 
         model: this.model});

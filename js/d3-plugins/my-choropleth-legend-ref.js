@@ -12,7 +12,10 @@ d3.myChoroplethLegend = function() {
   var width = 400,
       height = 100,
       margins = {top: 10, right: 25, bottom: 30, left: 20},
-      colorScale = null,
+      scale = null,
+      ticks = null,
+      tickFormat = null,
+      colors = null,
       title = null,
       heightClassRect = 15;
 
@@ -20,9 +23,9 @@ d3.myChoroplethLegend = function() {
       _gHeight = 100,
       _data = null,
       _xDomain = null,
-      _x = null,
+      //_x = null,
       _heightClass = 15,
-      _xAxis = d3.svg.axis().orient("bottom").tickFormat(d3.format("s"));
+      _xAxis = d3.svg.axis().orient("bottom");
 
   function chart(div) {
     _gWidth = width - margins.left - margins.right;
@@ -37,16 +40,27 @@ d3.myChoroplethLegend = function() {
             .attr("height", height)
           .append("g")
             .attr("transform", "translate(" + margins.left + "," + margins.top + ")");    
-
+      
       // define x scale
-      _xDomain = [0].concat(colorScale.domain());
-      _x = d3.scale.ordinal()
-        .domain(_xDomain)
-        .rangeRoundPoints([0, _gWidth]);
-
-      var rectWidth = _x.range()[1] - _x.range()[0];
-
-      _data = d3.zip(_xDomain, colorScale.range());
+      // if ordinal scale
+      if (scale.rangeRoundBands !== undefined) {
+        scale
+          .domain(ticks)
+          .rangeRoundPoints([0, _gWidth]);
+        var rectWidth = scale.range()[1] - scale.range()[0];
+        _data = d3.zip(scale.domain().slice(0,-1), colors);
+      // or quantitative: linear, ...  
+      } else {
+        // to be finalized ... 
+        /*
+        scale
+          .domain(d3.extent(ticks))
+          .range([0, _gWidth]);
+        var rectWidth = scale(ticks[1]) - scale(ticks[0]);
+        _data = d3.zip(ticks.slice(0,-1), colors);
+        _xAxis.tickValues(ticks);
+        */
+      }
 
       g.selectAll("rect")
           .data(_data)
@@ -54,12 +68,14 @@ d3.myChoroplethLegend = function() {
         .append("rect")
           .style("fill", function(d) {return d[1];})
           .style("fill-opacity", 0.7)
-          .attr("x", function(d) {return _x(d[0]);})
+          .attr("x", function(d) {return scale(d[0]);})
           .attr("width", rectWidth)
           .attr("height", heightClassRect);
-
+      
       // scale
-      _xAxis.scale(_x);
+      _xAxis.tickFormat(tickFormat);
+
+      _xAxis.scale(scale);
       g.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," +  heightClassRect + ")")
@@ -90,9 +106,24 @@ d3.myChoroplethLegend = function() {
     margins = _;
     return chart;
   };
-  chart.colorScale = function(_) {
-    if (!arguments.length) return colorScale;
-    colorScale = _;
+  chart.ticks = function(_) {
+    if (!arguments.length) return ticks;
+    ticks = _;
+    return chart;
+  };
+  chart.tickFormat = function(_) {
+    if (!arguments.length) return tickFormat;
+    tickFormat = _;
+    return chart;
+  };
+  chart.scale = function(_) {
+    if (!arguments.length) return scale;
+    scale = _;
+    return chart;
+  };
+  chart.colors = function(_) {
+    if (!arguments.length) return colors;
+    colors = _;
     return chart;
   };
   chart.title = function(_) {

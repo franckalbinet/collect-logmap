@@ -133,7 +133,7 @@ d3.myScatterPlotChart = function() {
           .style("fill-opacity", function(d) {
             var opacity = 1;
             if (highlight) {
-              opacity = (d.name === highlight) ? 1 : 0.2;
+              opacity = (d.name === highlight) ? 1 : 0.4;
             }
             return opacity;
           })

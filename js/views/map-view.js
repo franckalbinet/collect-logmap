@@ -52,7 +52,6 @@ Vis.Views.Map = Backbone.View.extend({
         }
       ,this);
 
-
     },
 
     joinGeomData: function(period) {
@@ -96,15 +95,17 @@ Vis.Views.Map = Backbone.View.extend({
 
       // Legend
       this.legend = d3.myChoroplethLegend()
-        .width(130)
-        .height(50)
-        .margins({top: 10, right: 40, bottom: 0, left: 10})
-        .heightClassRect(13)
-        .colorScale(this.scale)
-        .title("");
+        .width(140)
+        .height(50) 
+        .margins({top: 10, right: 30, bottom: 0, left: 10})
+        .ticks([0, 0.25, 0.5, 0.75, 1])
+        .tickFormat(d3.format("%"))
+        .scale(d3.scale.ordinal())
+        .colors(this.scale.range())
+        .heightClassRect(12);
+
 
       this.renderLegend();
-
     },
 
     renderLegend: function() {

@@ -414,7 +414,7 @@ path.choropleth {
 	position: absolute;
 	z-index: 1;
 	bottom: 0px;
-	right: 15px;
+	right: 0px;
 	background: rgba(255,255,255,0.6);
 	border-radius: 3px;	
 }
