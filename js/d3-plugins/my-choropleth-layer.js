@@ -65,13 +65,37 @@ d3.myChoroplethLayer = function() {
       paths
         .style("fill", function(d) {
           return scale(accessor(d)); })
+        /*
+        .style("stroke", function(d) {
+          var stroke = 0.7;
+          if (highlight) {
+            stroke = (d.id === highlight) ? "#CC0" : "#000" ;
+          }
+          return stroke;
+        })
+        .style("stroke-width", function(d) {
+          var width = "0.5px";
+          if (highlight) {
+            width = (d.id === highlight) ? "1px" : "0.5px" ;
+          }
+          return width;
+        })
+        .style("stroke-opacity", function(d) {
+          var opacity = 0.2;
+          if (highlight) {
+            opacity = (d.id === highlight) ? 1 : 0.2;
+          }
+          return opacity;
+        })
+        */  
         .style("fill-opacity", function(d) {
           var opacity = 0.7;
           if (highlight) {
-            opacity = (d.id === highlight) ? 0.7 : 0.1;
+            opacity = (d.id === highlight) ? 0.7 : 0.4;
           }
           return opacity;
         });
+      
     }
 
     function _initialize(selection) {

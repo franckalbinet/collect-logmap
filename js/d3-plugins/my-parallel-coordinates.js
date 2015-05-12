@@ -47,64 +47,49 @@ d3.myParallelCoordinates = function() {
       _render();
 
       function _render() {
-
-        // create Voronoi -- for smarter line hovering, ref to http://bl.ocks.org/njvack/1405439
-        if (!g.select(".voronois").empty()) g.select(".voronois").remove();
-        var voronois = g.append("g").attr("class", "voronois");
-
-        var voronoi = d3.geom.voronoi()
-          .x(function(d) { 
-            return x(d.key); })
-          .y(function(d) { return y[d.key](d.value); })
-          .clipExtent([[0, 0], [_gWidth, _gHeight]]);
-
-        var points = [];
-        data.forEach(function(d) {
-          dimensions.forEach(function(p) {
-            points.push({name: d.name, key: p, value: d[p]}); 
-          })
-        });
-
-        voronois.selectAll("path")
-            .data(voronoi(points))
-          .enter().append("path")
-            .attr("d", function(d) { 
-              if(d !== undefined) return "M" + d.join(",") + "Z"; 
-            })
-            .style('fill-opacity', 0)
-            .style('stroke-opacity', 0)
-            .style("stroke", d3.rgb(100,0,0));
-
-        voronois.selectAll("path")
-          .on("mouseover", function(d, i) {
-            _listeners.hovered(d.point.name); 
-            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible")
-          })
-          .on("mouseout", function(d, i) {
-            _listeners.hovered(null);
-            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "hidden");
-          })
-          .on("mousemove", function(d) {
-            Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-          });  
-       
-
         // EXIT - ENTER - UPDATE PATTERN
+
+        // Background
         // join data 
-        var lines = _gLines.selectAll("path")
+        var background = _gBackground.selectAll("path")
           .data(data, function(d) {
             return d.name + "-" + d.period});
 
         // if new dataset is smaller than the old one  -- remove
-        lines.exit().remove();
+        background.exit().remove();
+
+         // if new dataset is larger
+        background
+          .enter().append("path")
+            .attr("d", _path)
+            .on("mouseover", function(d, i) {
+              _listeners.hovered(d.name); 
+              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "visible")
+            })
+            .on("mouseout", function(d, i) {
+              _listeners.hovered(null);
+              Vis.DEFAULTS.D3_TOOLTIP.html(d.name).style("visibility", "hidden");
+            })
+            .on("mousemove", function(d) {
+              Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+            });
+            
+        // Foreground
+        // join data 
+        var foreground = _gForeground.selectAll("path")
+          .data(data, function(d) {
+            return d.name + "-" + d.period});
+
+        // if new dataset is smaller than the old one  -- remove
+        foreground.exit().remove();
 
         // if new dataset is larger
-        lines
+        foreground
           .enter().append("path")
             .attr("d", _path);
            
         // if new dataset same size
-        lines
+        foreground
           .style("stroke", function(d) {
             var stroke = d3.rgb(4, 90, 141);
             if (highlight) {
@@ -118,8 +103,8 @@ d3.myParallelCoordinates = function() {
               strokeWidth = (d.name === highlight) ? 1.5 : 0.4;
             }
             return strokeWidth;
-          })
-        
+          });
+     
         // returns the path for a given data point
         function _path(d) {
           return _line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
@@ -146,7 +131,9 @@ d3.myParallelCoordinates = function() {
             .range([_gHeight, 0]);
         });
 
-        _gLines = g.append("g").attr("class", "lines");
+        //_gLines = g.append("g").attr("class", "lines");
+        _gForeground = g.append("g").attr("class", "foreground");
+        _gBackground = g.append("g").attr("class", "background");
 
         // add a group element for each dimension
         _gDimensions = g.selectAll(".dimension")
@@ -163,20 +150,7 @@ d3.myParallelCoordinates = function() {
             .style("text-anchor", "middle")
             .attr("y", -13)
             .text(function(d) { return d; });
-
       }
-
-      /*
-      // listening brush events
-      // throttling brush event in order not to overload browser
-      var _throttled = _.throttle(_listeners.filtering, 0);
-      brush.on("brush", function() { 
-        _render();
-        //_listeners.filtering(brush);
-        _throttled(brush); 
-      });
-      brush.on("brushend", function() { _listeners.filtered(brush); });
-      */
     });
 
   }

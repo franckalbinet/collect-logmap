@@ -305,7 +305,13 @@ a:hover, .dropdown-menu > .active > a:focus {
 
 /* Charts & map */
 
-#parallel-coordinates-chart .lines path {
+#parallel-coordinates-chart .background path {
+	 fill: none;
+  stroke: none;
+  stroke-width: 10px;
+  pointer-events: stroke;
+}
+#parallel-coordinates-chart .foreground path {
 	fill: none;
   stroke: rgb(4, 90, 141);
   stroke-width: 0.4;
@@ -423,6 +429,18 @@ path.choropleth {
 	font-size: 11px;
 	font-weight: bold;
 }
+.legend .axis {
+  font: 9px sans-serif;
+  fill: #666;
+}
+.legend .axis path,
+.legend .axis line {
+  fill: none;	
+  stroke: #999;
+  shape-rendering: crispEdges;
+}
+
+
 
 /* Tooltips */
  .tooltips {
