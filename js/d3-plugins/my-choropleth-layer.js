@@ -24,20 +24,25 @@ d3.myChoroplethLayer = function() {
 
   function chart(div) {
 
+    var features = [];
+    data.forEach(function(d) { 
+      d.properties.zoom = map.getZoom() ;
+      features.push({geometry: d.geometry, id: d.id, type: d.type, properties: _.clone(d.properties)});  
+    });
+
     // only at first call
     if (!_gChoropleth) _initialize(this);
 
-    _zoom = map.getZoom();
+    //_zoom = map.getZoom();
 
     _render();
 
     function _render() {
       // EXIT - ENTER - UPDATE PATTERN
-      // Data join
-      var paths = _gChoropleth.selectAll("path")
-          .data(data, function(d) { 
-            //console.log(d.id + "-" + _zoom);
-            return d.id + "-" + _zoom; });
+      // Data join  
+      var paths = _gChoropleth.selectAll("path.choropleth")
+          .data(features, function(d) { 
+            return d.id + "-" + d.properties.period + "-" + d.properties.zoom; });
 
       // if new dataset is smaller than the old one  -- remove
       paths.exit().remove();
@@ -51,7 +56,6 @@ d3.myChoroplethLayer = function() {
         })
         .on("mouseover", function(d) {
           _listeners.hovered(d.id); 
-          //this.parentNode.appendChild(this);
           Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "visible");
         })
         .on("mouseout", function(d, i) {
@@ -85,21 +89,9 @@ d3.myChoroplethLayer = function() {
           var opacity = 0.2;
           if (highlight) {
             opacity = (d.id === highlight) ? 0.8 : 0.2;
-            //this.parentNode.appendChild(this);
           }
           return opacity;
         });       
-        /*   
-        .style("fill-opacity", function(d) {
-          var opacity = 0.7;
-          if (highlight) {
-            opacity = (d.id === highlight) ? 0.7 : 0.4;
-          }
-          return opacity;
-        });
-*/
-        
-      
     }
 
     function _initialize(selection) {
@@ -108,7 +100,7 @@ d3.myChoroplethLayer = function() {
       _svg = selection.select("svg"); 
 
       // create choropleth paths container
-      _gChoropleth = _svg.append("g").attr("class", "choropleths");  
+      _gChoropleth = _svg.append("g").attr("id", "choropleths");  
 
       _path = d3.geo.path().projection(function project(x) {
           var point = map.latLngToLayerPoint(new L.LatLng(x[1], x[0]));

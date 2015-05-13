@@ -21,7 +21,7 @@ Vis.Views.Map = Backbone.View.extend({
       this.accessor = options.accessor;
       this.legendTitle = options.legendTitle;
 
-      // keep only geometry with data available
+      // keep only features with data available
       this.features = this.model.get("data").geometry.features.filter(function(d) { 
         return _.has(that.model.get("data").lookup, d.id); 
       });
@@ -35,6 +35,9 @@ Vis.Views.Map = Backbone.View.extend({
       this.model.on("change:period", function() {
         var period = this.get("period");
         that.joinGeomData(period);
+
+        //that.choropleth.data(that.features);
+
         that.render();
       });
 
@@ -52,12 +55,19 @@ Vis.Views.Map = Backbone.View.extend({
         }
       ,this);
 
+       Backbone.on("moved:map", 
+        function(d) {
+          this.map.setView(d.center, d.zoom);
+        }
+      ,this);
     },
 
     joinGeomData: function(period) {
       var that = this;
+      // "feed" features properties with data for specific period
       this.features.forEach(function(d) {
         _.extend(d.properties, that.model.get("data").lookup[d.id][period]); 
+        _.extend(d.properties, {period: period}); 
       });
     },
 
@@ -89,10 +99,13 @@ Vis.Views.Map = Backbone.View.extend({
       this.render();
 
       this.map.on("moveend", function() {
-        that.model.set("zoomLevel", that.map.getZoom());
         that.render();
       });
-
+      
+      this.map.on("drag zoomend", function() {
+        Backbone.trigger("moved:map", {zoom: that.map.getZoom(), center: that.map.getCenter()})
+      });
+     
       // Legend
       this.legend = d3.myChoroplethLegend()
         .width(140)
@@ -103,7 +116,6 @@ Vis.Views.Map = Backbone.View.extend({
         .scale(d3.scale.ordinal())
         .colors(this.scale.range())
         .heightClassRect(12);
-
 
       this.renderLegend();
     },
