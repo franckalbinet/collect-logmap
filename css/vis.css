@@ -344,6 +344,7 @@ path.choropleth {
 	stroke: #000;
 	stroke-opacity: 0.2;
 	stroke-width: 0.5px;
+	stroke-linejoin: round;
 }
 
 

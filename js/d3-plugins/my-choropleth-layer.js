@@ -51,6 +51,7 @@ d3.myChoroplethLayer = function() {
         })
         .on("mouseover", function(d) {
           _listeners.hovered(d.id); 
+          //this.parentNode.appendChild(this);
           Vis.DEFAULTS.D3_TOOLTIP.html(d.id).style("visibility", "visible");
         })
         .on("mouseout", function(d, i) {
@@ -65,29 +66,30 @@ d3.myChoroplethLayer = function() {
       paths
         .style("fill", function(d) {
           return scale(accessor(d)); })
-        /*
         .style("stroke", function(d) {
           var stroke = 0.7;
           if (highlight) {
-            stroke = (d.id === highlight) ? "#CC0" : "#000" ;
+            stroke = (d.id === highlight) ? "rgb(221, 100, 100)" : "#000" ;
+            if (d.id === highlight) this.parentNode.appendChild(this);
           }
           return stroke;
         })
         .style("stroke-width", function(d) {
           var width = "0.5px";
           if (highlight) {
-            width = (d.id === highlight) ? "1px" : "0.5px" ;
+            width = (d.id === highlight) ? "3px" : "0.5px" ;
           }
           return width;
         })
         .style("stroke-opacity", function(d) {
           var opacity = 0.2;
           if (highlight) {
-            opacity = (d.id === highlight) ? 1 : 0.2;
+            opacity = (d.id === highlight) ? 0.8 : 0.2;
+            //this.parentNode.appendChild(this);
           }
           return opacity;
-        })
-        */  
+        });       
+        /*   
         .style("fill-opacity", function(d) {
           var opacity = 0.7;
           if (highlight) {
@@ -95,6 +97,8 @@ d3.myChoroplethLayer = function() {
           }
           return opacity;
         });
+*/
+        
       
     }
 

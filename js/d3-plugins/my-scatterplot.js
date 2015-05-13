@@ -38,64 +38,51 @@ d3.myScatterPlotChart = function() {
       // create the skeleton chart.
       if (g.empty()) _skeleton();
 
-      //_gYAxis.transition().duration(300).call(yAxis);
       _render();
 
       function _render() {
 
-        // create Voronoi -- for smarter point picker -- ref to http://bl.ocks.org/njvack/1405439
-        if (!g.select("#point-paths").empty()) g.select("#point-paths").remove();
-        var paths = g.append("g").attr("id", "point-paths");
+        // VORONOI
+        // if data has changed re-calculate Voronoi
+        var dots = _gPoints.selectAll("circle")
+          .data(data, function(d) { return d.name + d.period; });
+        
+        if (!dots.enter().empty() || !dots.exit().empty()) {
+          // create Voronoi -- for smarter point picker -- ref to http://bl.ocks.org/njvack/1405439
+          g.select("#point-paths").remove();
+          var paths = g.append("g").attr("id", "point-paths");
 
-        var voronoi = d3.geom.voronoi()
-          .x(function(d) { 
-            return x(d[xAttr]); })
-          .y(function(d) { return y(d[yAttr]); })
-          .clipExtent([[0, 0], [_gWidth, _gHeight]]);
+          var voronoi = d3.geom.voronoi()
+            .x(function(d) { 
+              return x(d[xAttr]); })
+            .y(function(d) { return y(d[yAttr]); })
+            .clipExtent([[0, 0], [_gWidth, _gHeight]]);
 
-        paths.selectAll("path")
-            .data(voronoi(data))
-          .enter().append("path")
-            .attr("d", function(d) { 
-              if(d !== undefined) return "M" + d.join(",") + "Z"; 
-            })
-            .attr("id", function(d,i) { 
-              return "path-"+i; })
-            .style('fill-opacity', 0)
-            .style('stroke-opacity', 0)
-            .style("stroke", d3.rgb(100,0,0));
+          paths.selectAll("path")
+              .data(voronoi(data))
+            .enter().append("path")
+              .attr("d", function(d) { 
+                if(d !== undefined) return "M" + d.join(",") + "Z"; 
+              })
+              .attr("id", function(d,i) { 
+                return "path-"+i; })
+              .style('fill-opacity', 0)
+              .style('stroke-opacity', 0)
+              .style("stroke", d3.rgb(100,0,0))
+              .on("mouseover", function(d, i) {
+                _listeners.hovered(d.point.name); 
+                Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible");
+              })
+              .on("mousemove", function(d) {
+                Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+              })
+              .on("mouseout", function(d, i) {
+                _listeners.hovered(null);
+                Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "hidden");
+              });
+          }
 
-        paths.selectAll("path")
-          .on("mouseover", function(d, i) {
-            _listeners.hovered(d.point.name); 
-            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "visible");
-            
-            /*            
-            delete path
-            if highlight
-            then draw line
-
-            g.append("path").attr("class")
-            x(d.point[xAttr])
-            y(d.point[yAttr])
-
-            d3.select("#scatterplot-collected-vs-collectors svg")
-              .append("path")
-              .attr("d", "M50 50 H200V200")
-              .style("stroke", "#000")
-              .style("stroke-width", "2px")
-              .style("fill", "none");
-            */
-          })
-          .on("mouseout", function(d, i) {
-            _listeners.hovered(null);
-            Vis.DEFAULTS.D3_TOOLTIP.html(d.point.name).style("visibility", "hidden");
-          })
-          .on("mousemove", function(d) {
-            Vis.DEFAULTS.D3_TOOLTIP.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
-          });
-          
-        // coordinates path
+        // COORDINATES PATH
         g.select(".coord-path").remove();    
         if (highlight) {
           var point = data.filter(function(d) {return d.name === highlight;})[0];    
@@ -152,9 +139,6 @@ d3.myScatterPlotChart = function() {
         // set scales range
         x.range([0 , _gWidth]);
         y.range([_gHeight, 0]);
-        
-        // set brush
-        //brush.x(x);
         
         // set axis
         xAxis.scale(x);

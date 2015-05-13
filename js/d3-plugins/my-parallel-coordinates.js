@@ -100,7 +100,7 @@ d3.myParallelCoordinates = function() {
           .style("stroke-width", function(d) {
             var strokeWidth = 0.4;
             if (highlight) {
-              strokeWidth = (d.name === highlight) ? 1.5 : 0.4;
+              strokeWidth = (d.name === highlight) ? 1.2 : 0.4;
             }
             return strokeWidth;
           });
