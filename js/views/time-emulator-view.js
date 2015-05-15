@@ -28,7 +28,7 @@ Vis.Views.TimeEmulator = Backbone.View.extend({
           that.counterIdx++;
           that.model.set("period", that.counterIdx % (Vis.DEFAULTS.NB_PERIODS_SIMULATED.length)); 
           badgeTextSelector.text( (that.model.get("period") + 1) + " / " + Vis.DEFAULTS.NB_PERIODS_SIMULATED.length);
-        }, Vis.DEFAULTS.PERDOD_SPEED);
+        }, Vis.DEFAULTS.PERIOD_SPEED);
       } else {
         textSelector.text("Play");
         glyphiconSelector.removeClass("glyphicon-pause");

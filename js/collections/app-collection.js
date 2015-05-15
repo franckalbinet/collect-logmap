@@ -1,6 +1,8 @@
 Vis.Collections.App = Backbone.Collection.extend({
   
   url: "data/",
+  scenariosCollectionLookup: {},
+  scenariosAnalysisLookup: {},
  
   initialize: function(options) {
     Backbone.off("loadData");
@@ -45,6 +47,18 @@ Vis.Collections.App = Backbone.Collection.extend({
 
     // on success
     function _ready(error, withNameCentroid, prefectures) {
+
+      // associating feature with scenarios: balanced, under, over.
+      withNameCentroid.forEach(function(d) {
+        that.scenariosCollectionLookup[d.name] = Vis.DEFAULTS.SCENARIOS.balanced
+        if (Vis.DEFAULTS.COLLECTION_UNDER.indexOf(d.name) != -1) that.scenariosCollectionLookup[d.name] = Vis.DEFAULTS.SCENARIOS.under;
+        if (Vis.DEFAULTS.COLLECTION_OVER.indexOf(d.name) != -1) that.scenariosCollectionLookup[d.name] = Vis.DEFAULTS.SCENARIOS.over;
+
+        that.scenariosAnalysisLookup[d.name] = Vis.DEFAULTS.SCENARIOS.balanced
+        if (Vis.DEFAULTS.ANALYSIS_UNDER.indexOf(d.name) != -1) that.scenariosAnalysisLookup[d.name] = Vis.DEFAULTS.SCENARIOS.under;
+        if (Vis.DEFAULTS.ANALYSIS_OVER.indexOf(d.name) != -1) that.scenariosAnalysisLookup[d.name] = Vis.DEFAULTS.SCENARIOS.over;
+      });
+
       var withPlanned = that.getPlanned(withNameCentroid);
       var withLabs = that.getLabs(withPlanned);
       var withCollectors = that.getCollectors(withLabs);
@@ -75,34 +89,6 @@ Vis.Collections.App = Backbone.Collection.extend({
   },
   */
 
-  getLabs: function(data){
-    var labs = [];
-
-    var scale = d3.scale.pow().exponent(0.1)
-      .domain([Vis.DEFAULTS.MIN_LABS, Vis.DEFAULTS.MAX_LABS])
-      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
-
-    data.forEach(function(item) {
-      item["labs"] = parseInt(scale.invert(item.planned));
-      labs.push(item);
-    });
-    return labs;
-  },
-
-  getCollectors: function(data){
-    var collectors = [];
-
-    var scale = d3.scale.pow().exponent(0.1)
-      .domain([Vis.DEFAULTS.MIN_COLLECTORS, Vis.DEFAULTS.MAX_COLLECTORS])
-      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
-
-    data.forEach(function(item) {
-      item["collectors"] = parseInt(scale.invert(item.planned));
-      collectors.push(item);
-    });
-    return collectors;
-  },
-
   // planned items interpolated from min to max based on centroids distance
   getPlanned: function(data) {
     var that = this;
@@ -123,10 +109,42 @@ Vis.Collections.App = Backbone.Collection.extend({
     var planned = nameDistances.map(function(item) {
       item["planned"] = parseInt(scale(item.distance)/100) * 100;
       return _.omit(item, ["distance", "lat", "lon"]);
-      //return item;
     });
 
     return planned;
+  },
+
+  getLabs: function(data){
+    var that = this;
+    var labs = [];
+
+    var scale = d3.scale.pow().exponent(0.1)
+      .domain([Vis.DEFAULTS.MIN_LABS, Vis.DEFAULTS.MAX_LABS])
+      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
+
+    data.forEach(function(item) {
+      var noise = that.scenariosAnalysisLookup[item.name].staffing();
+      item["labs"] = parseInt(scale.invert(item.planned)*noise);
+      labs.push(item);
+    });
+    return labs;
+  },
+
+  getCollectors: function(data){
+    var that =this;
+    var collectors = [];
+
+    var scale = d3.scale.pow().exponent(0.1)
+      .domain([Vis.DEFAULTS.MIN_COLLECTORS, Vis.DEFAULTS.MAX_COLLECTORS])
+      .range([Vis.DEFAULTS.MIN_PLANNED, Vis.DEFAULTS.MAX_PLANNED]);
+
+
+    data.forEach(function(item) {
+      var noise = that.scenariosCollectionLookup[item.name].staffing();
+      item["collectors"] = parseInt(scale.invert(item.planned)*noise);
+      collectors.push(item);
+    });
+    return collectors;
   },
 
   getCollected: function(data){
@@ -146,9 +164,11 @@ Vis.Collections.App = Backbone.Collection.extend({
         } else {
           var n_1 = collected.filter(function(d) { 
             return d.name == item.name && d.period == (period - 1) })[0].collected;
+          var max = (Vis.DEFAULTS.COLLECTION_UNDER.indexOf(item.name) != -1) ? item.planned*0.7: item.planned;
+
           collected.push(
             _.extend({
-              collected: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](period) * that.random(0, item.planned - n_1)),
+              collected: parseInt(that.scenariosCollectionLookup[item.name].growth.range([n_1, max])(period)),
               period: period
             }, item)
           );
@@ -175,10 +195,15 @@ Vis.Collections.App = Backbone.Collection.extend({
         var n_1 = analysed.filter(function(d) { 
             return d.name == item.name && d.period == (item.period - 1) })[0].analysed;
 
+        var max = (Vis.DEFAULTS.ANALYSIS_UNDER.indexOf(item.name) != -1) ? item.collected*0.7: item.collected;
+
         analysed.push(
           _.extend(
-            {analysed: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](item.period) * that.random(0, item.collected - n_1))}
-            , item)
+            {
+              //analysed: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](item.period) * that.random(0, item.collected - n_1))}
+              //analysed: parseInt(n_1 + Vis.DEFAULTS.GROWTH_RATES_SIMULATED[growthRateIndex](item.period) * that.random(0, item.collected - n_1))}
+              analysed: parseInt(that.scenariosAnalysisLookup[item.name].growth.range([n_1, max])(item.period))}
+             , item)
         );
       }
     });

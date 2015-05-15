@@ -26,7 +26,48 @@ window.Vis = {
     Vis.DEFAULTS.MAX_COLLECTORS = 300; 
     Vis.DEFAULTS.MIN_COLLECTORS = 10; 
     Vis.DEFAULTS.NB_PERIODS_SIMULATED = d3.range(0,20); 
-    Vis.DEFAULTS.PERDOD_SPEED = 200;
+    Vis.DEFAULTS.PERIOD_SPEED = 200;
+
+    Vis.DEFAULTS.SCENARIOS = 
+    { over: {
+        growth: d3.scale.pow().exponent(0.5).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+        staffing: d3.random.normal(1.6,0.2)
+      },
+      balanced: {
+        growth: d3.scale.linear().domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+        staffing: d3.random.normal(1,0.3) 
+      },
+      under: {
+        growth: d3.scale.pow().exponent(2).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+        staffing: d3.random.normal(0.5,0.1)
+      }
+    };  
+
+    Vis.DEFAULTS.COLLECTION_UNDER = ["Miyagi", "Niigata", "Hiroshima", "Aichi", "Nagano"]; 
+    Vis.DEFAULTS.COLLECTION_OVER = ["Iwate", "Yamagata"]; 
+    
+    Vis.DEFAULTS.ANALYSIS_UNDER = ["Chiba", "Akita", "Shiga", "Shimane", "Nagano"]; 
+    Vis.DEFAULTS.ANALYSIS_OVER = ["Ibaraki", "Aomori"]; 
+
+    
+    Vis.DEFAULTS.GROWTH_RATES = [
+      d3.scale.pow().exponent(0.1).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(0.2).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(0.3).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(0.5).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(2).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(3).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(4).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.pow().exponent(5).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)),
+      d3.scale.linear().domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED))
+    ];
+
+    Vis.DEFAULTS.STAFFING = [
+      d3.random.normal(0.6,0.07), 
+      d3.random.normal(1.4,0.07), 
+      d3.random.normal(1,0.06) 
+    ];
+
     Vis.DEFAULTS.GROWTH_RATES_SIMULATED = [
       d3.scale.linear().domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
       d3.scale.pow().exponent(0.1).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
@@ -36,6 +77,7 @@ window.Vis = {
       d3.scale.pow().exponent(3).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1]),
       d3.scale.pow().exponent(4).domain(d3.extent(Vis.DEFAULTS.NB_PERIODS_SIMULATED)).range([0.1, 1])
     ];
+    
     Vis.DEFAULTS.MAP_FOCUS = {center: [38, 135], zoom: 5};
     
     // To be moved accordingly

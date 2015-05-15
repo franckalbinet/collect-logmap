@@ -82,7 +82,7 @@ Vis.Views.Map = Backbone.View.extend({
         {
           minZoom: 0,
           attributionControl: false,
-          zoomControl: false,
+          zoomControl: true,
           dragging: true,
           touchZoom: false,
           scrollWheelZoom: false
@@ -101,16 +101,16 @@ Vis.Views.Map = Backbone.View.extend({
       this.map.on("moveend", function() {
         that.render();
       });
-      
+
       this.map.on("drag zoomend", function() {
         Backbone.trigger("moved:map", {zoom: that.map.getZoom(), center: that.map.getCenter()})
       });
      
       // Legend
       this.legend = d3.myChoroplethLegend()
-        .width(140)
-        .height(50) 
-        .margins({top: 10, right: 30, bottom: 0, left: 10})
+        .width(130)
+        .height(38) 
+        .margins({top: 10, right: 15, bottom: 0, left: 10})
         .ticks([0, 0.25, 0.5, 0.75, 1])
         .tickFormat(d3.format("%"))
         .scale(d3.scale.ordinal())

@@ -347,7 +347,7 @@ path.choropleth {
 	stroke-linejoin: round;
 }
 
-
+	
 .leaflet-control-pan a {
 	background-color: #fff;
 	width: 22px;
@@ -420,9 +420,9 @@ path.choropleth {
 .legend {
 	position: absolute;
 	z-index: 1;
-	bottom: 0px;
-	right: 0px;
-	background: rgba(255,255,255,0.6);
+	bottom: 5px;
+	right: 5px;
+	background: rgba(255,255,255,0.8);
 	border-radius: 3px;	
 }
 .legend .title{
@@ -440,7 +440,14 @@ path.choropleth {
   stroke: #999;
   shape-rendering: crispEdges;
 }
-
+/* Zoom control */
+.leaflet-bar a, .leaflet-control-layers-toggle, .leaflet-popup-close-button, .map-tooltip.closable .close, .mapbox-button-icon:before, .mapbox-icon {
+  width: 22px;
+  height: 22px;
+}
+.leaflet-container.dark .map-tooltip .close, .leaflet-control-layers-toggle, .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-popup-close-button, .map-tooltip .close, .mapbox-icon {
+  background-size: 22px 238px;
+}
 
 
 /* Tooltips */

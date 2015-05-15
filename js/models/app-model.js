@@ -3,8 +3,7 @@ Vis.Models.App = Backbone.Model.extend({
   defaults: {
     data: null,
     timeBtnStatus: "pause", // "pause" or "play"
-    period: 0,
-    zoomLevel: 0
+    period: 0
   },
 
   initialize: function () {

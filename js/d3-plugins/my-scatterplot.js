@@ -62,7 +62,8 @@ d3.myScatterPlotChart = function() {
               .data(voronoi(data))
             .enter().append("path")
               .attr("d", function(d) { 
-                if(d !== undefined) return "M" + d.join(",") + "Z"; 
+                //console.log(d.length);
+                if(d !== undefined && d.length >0 ) return "M" + d.join(",") + "Z"; 
               })
               .attr("id", function(d,i) { 
                 return "path-"+i; })

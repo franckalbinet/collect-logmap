@@ -88,7 +88,7 @@ d3.myChoroplethLayer = function() {
         .style("stroke-opacity", function(d) {
           var opacity = 0.2;
           if (highlight) {
-            opacity = (d.id === highlight) ? 0.8 : 0.2;
+            opacity = (d.id === highlight) ? 0.9 : 0.2;
           }
           return opacity;
         });       
