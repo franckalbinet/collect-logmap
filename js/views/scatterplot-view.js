@@ -63,8 +63,8 @@ Vis.Views.Scatterplot = Backbone.View.extend({
       
       this.chart = d3.myScatterPlotChart()
         //.width(360)
-        .width(555)
-        .height(300)
+        .width(360)
+        .height(340)
         .margins({top: 20, right: 20, bottom: 20, left: 40})
         .data(that.data)
         .xAttr(that.xAttr)

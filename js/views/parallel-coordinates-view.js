@@ -53,7 +53,7 @@ Vis.Views.ParallelCoordinates = Backbone.View.extend({
 
       this.chart = d3.myParallelCoordinates()
         .width(360)
-        .height(340)
+        .height(740)
         .margins({top: 30, left:0, bottom: 10,right: 10})
         .data(that.data)
         .dimensions(["planned", "collected", "analysed"]);       

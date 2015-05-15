@@ -112,6 +112,12 @@ ul.pager a {
 	background-color: #f8f8f8;
 	height: 400px;
 }
+.simple {
+	height: 390px
+}
+.double {
+	height: 780px;
+}
 .content {
 	margin-top: 10px;
 }
@@ -306,7 +312,7 @@ a:hover, .dropdown-menu > .active > a:focus {
 /* Charts & map */
 
 #parallel-coordinates-chart .background path {
-	 fill: none;
+	fill: none;
   stroke: none;
   stroke-width: 10px;
   pointer-events: stroke;
