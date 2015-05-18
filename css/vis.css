@@ -314,7 +314,7 @@ a:hover, .dropdown-menu > .active > a:focus {
 #parallel-coordinates-chart .background path {
 	fill: none;
   stroke: none;
-  stroke-width: 10px;
+  stroke-width: 20px;
   pointer-events: stroke;
 }
 #parallel-coordinates-chart .foreground path {
