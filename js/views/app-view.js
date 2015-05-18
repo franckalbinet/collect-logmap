@@ -42,9 +42,10 @@ Vis.Views.App = Backbone.View.extend({
         xScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_COLLECTORS]),
         yScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_PLANNED]),
         xAttr: "collectors",
-        yAttr: "collected",
+        //yAttr: "collected",
+        yAttr: "planned",
         xTitle: "Nb. collectors",
-        yTitle: "Nb. collected samples"
+        yTitle: "Nb. planned samples"
       });
 
       new Vis.Views.Scatterplot({ 
@@ -54,9 +55,10 @@ Vis.Views.App = Backbone.View.extend({
         xScale: d3.scale.linear(),
         yScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_PLANNED]),
         xAttr: "labs",
-        yAttr: "analysed",
+        //yAttr: "analysed",
+        yAttr: "planned",
         xTitle: "Nb. laboratories",
-        yTitle: "Nb. analysed samples"
+        yTitle: "Nb. planned samples"
       });
           
       new Vis.Views.TimeEmulator({ 
