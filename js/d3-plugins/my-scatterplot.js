@@ -139,6 +139,7 @@ d3.myScatterPlotChart = function() {
       function _skeleton(){
         // set scales range
         x.range([0 , _gWidth]);
+        x.domain([0, d3.max(data, function(d) { return d[xAttr]; })]);
         y.range([_gHeight, 0]);
         
         // set axis

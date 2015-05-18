@@ -50,7 +50,8 @@ Vis.Views.App = Backbone.View.extend({
       new Vis.Views.Scatterplot({ 
         el: '#scatterplot-analysed-vs-labs',
         model: this.model,
-        xScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_LABS]),
+        //xScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_LABS]),
+        xScale: d3.scale.linear(),
         yScale: d3.scale.linear().domain([0, Vis.DEFAULTS.MAX_PLANNED]),
         xAttr: "labs",
         yAttr: "analysed",
